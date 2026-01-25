@@ -5,14 +5,19 @@ This project creates an interactive timeline and map visualization for CAP LTER 
 # Overview
 
 The visualization consists of two main components:
-1. **Timeline Chart**: A horizontal bar chart showing the land-use history for each sampling site, segmented by NLCD (National Land Cover Database) snapshot years
-2. **Interactive Map**: A map showing the geographic locations of all sites, colored by their latest NLCD land-use classification
+1. **Timeline Chart**: A horizontal bar chart showing the land-use history for
+   each sampling site, segmented by NLCD (National Land Cover Database)
+snapshot years
+2. **Interactive Map**: A map showing the geographic locations of all sites,
+   colored by their latest NLCD land-use classification
 
 ## Features
 
 **Dynamic Timeline**: Automatically adjusts to show all sites in the dataset
-**Land-Use Segmentation**: Timeline bars are segmented by NLCD snapshot years (2001, 2006, 2011, 2016, 2019)
-**Interactive Elements**: Hover tooltips show detailed information about each site and time period
+**Land-Use Segmentation**: Timeline bars are segmented by NLCD snapshot years
+(2001, 2006, 2011, 2016, 2019)
+**Interactive Elements**: Hover tooltips show detailed information about each
+site and time period
  **Visual Indicators**: 
   - Vertical dotted lines mark NLCD snapshot boundaries
   - Horizontal grey lines every 5 sites for improved readability
