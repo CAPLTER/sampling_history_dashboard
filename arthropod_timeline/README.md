@@ -29,8 +29,11 @@ site and time period
 ```
 arthropod_timeline/
 ├── build_timeline.py      # Main script that generates the visualization
-├── data/
-│   └── arthros_temporal.csv  # Input data file (site codes, dates, coordinates)
+├── data/                  # Raw study files (see "Input Data")
+│   ├── 41_core_arthropods.csv
+│   ├── 41_core_arthropods_locations.geojson
+│   ├── 643_mcdowell_pitfall_arthropods.csv
+│   └── 643_mcdowell_arthropod_locations.geojson
 ├── build/
 │   ├── index.html         # Generated HTML visualization page
 │   ├── summary.csv        # One row per site with summary information
@@ -62,7 +65,7 @@ pip install pandas plotly pygeohydro
 
 ### Running the Script
 
-1. Ensure your data file is in the correct location: `data/arthros_temporal.csv`
+1. Ensure the study files are in `data/` (see [Input Data](#input-data))
 2. Run the script:
 ```bash
 python build_timeline.py
@@ -71,19 +74,53 @@ python build_timeline.py
 3. The generated visualization will be saved to `build/index.html`
 4. Open `build/index.html` in a web browser to view the visualization
 
-### Input Data Format
+### Input Data
 
-The input CSV file (`data/arthros_temporal.csv`) must contain the following columns:
+The dashboard is built directly from the raw study files in `data/`. Nothing in
+`build_timeline.py` names a specific file, so the directory is scanned by shape
+rather than by name and additional studies can simply be dropped in.
 
-- `site_code`: Unique identifier for each site (e.g., "AA-17", "AB-19")
-- `start_date`: Start date of sampling (format: YYYY-MM-DD)
-- `end_date`: End date of sampling (format: YYYY-MM-DD, can be empty for active sites)
-- `lat`: Latitude coordinate (decimal degrees)
-- `long`: Longitude coordinate (decimal degrees)
+**Sampling CSVs** — any `.csv` carrying both a `site_code` and a `sample_date`
+column. One row per organism record; the other columns of the CAP LTER exports
+(`count`, `flags`, `trap_name`, and so on) may be present but only `flags` is
+used. Files without those two columns are ignored, and the script logs which
+ones it skipped.
+
+**Location GeoJSONs** — any `.geojson` whose features carry a `site_code`
+property. Each site is placed at the centroid of its polygon; `Point` and
+`MultiPolygon` geometries are also accepted.
+
+A site's sampling span runs from its first to its last sampling event. A date
+counts as a sampling event when a trap was actually collected: empty traps are
+kept, because an empty trap is a real event with a real result, while records
+flagged `trap_not_collected`, `miscoded`, or `empty_sampling_event` are
+excluded. See `EXCLUDED_FLAGS` in `build_timeline.py`.
+
+Because every boundary comes from the data, rebuilding unchanged inputs
+reproduces byte-identical output — the build does not depend on the date it is
+run.
+
+#### Paired locations
+
+`643_mcdowell_arthropod_locations.geojson` is the one exception to the rule
+above. It carries a single polygon per *pair* of sites, keyed by a composite
+`sampling_location` name (`Bell_Gateway`, `DixieMine_Prospector`, ...), and each
+polygon is only the bounding box of its two sites, so per-site positions cannot
+be recovered from it. Those ten coordinates are therefore kept in
+`MCDOWELL_SITE_COORDS`, and the build re-checks each one against the polygon
+that covers it, warning if either drifts. Note that `DixieMine` in a polygon
+name is the site coded `Mine` in the sampling CSV; that pairing lives in
+`PAIRED_POLYGON_MEMBERS`.
 
 ### Output Files
 
-The script generates three output files in the `build/` directory:
+The script generates three output files in the `build/` directory. All three are
+**independent products of the same in-memory table** — none is an input to
+another. In particular, the CSVs are *not* read when the visualization is built:
+`index.html` is rendered straight from the enriched site table, so deleting both
+CSVs would leave the page byte-identical. They exist to publish the underlying
+numbers, and the deploy workflow uploads the whole `build/` directory, so both
+are downloadable from the live site alongside the page.
 
 1. **index.html**: Interactive visualization page with timeline and map
 2. **summary.csv**: Summary data with one row per site, including:
@@ -97,14 +134,56 @@ The script generates three output files in the `build/` directory:
    - Land-use class for that segment
    - NLCD code and snapshot year used
 
-#Data Processing Pipeline
+## Data Processing Pipeline
 
-1. **Data Loading**: Reads the temporal CSV file and parses dates
-2. **Status Determination**: Sites with missing `end_date` are marked as "Active"
+The build is a short linear stage that assembles one enriched table, followed by
+three outputs generated independently from it:
+
+```
+data/  (sampling CSVs + location GeoJSONs)
+   |
+   +-> build_site_table()       one row per site: span + coordinates
+   +-> enrich_with_land_use()   adds NLCD codes and land-use labels
+                |
+                |  (the enriched table, held in memory)
+                |
+    +-----------+-----------------------+
+    |           |                       |
+    v           v                       v
+export_       build_segmented_    build_map_html()
+enriched_     timeline_html()
+data()              |                   |
+    |               +--------+----------+
+    v                        v
+summary.csv             index.html
+detailed.csv
+```
+
+1. **Data Loading**: Scans `data/` for sampling CSVs and location GeoJSONs, and
+   reduces the sampling records to a first and last sampling date per site
+2. **Status Determination**: Sites whose last sampling event falls within a year
+   of the most recent event anywhere in the data are labelled "Sampled to study
+   end"; the rest are "Retired early"
 3. **NLCD Enrichment**: For each site, retrieves NLCD land-use data for all snapshot years
-4. **Timeline Segmentation**: Creates segments for each period between NLCD snapshots
-5. **Visualization Generation**: Creates interactive Plotly charts
-6. **Export**: Generates HTML page and CSV exports
+4. **Outputs**: The timeline, the map, and the two CSVs are each derived from
+   the enriched table. `export_enriched_data()` happens to run first, but nothing
+   after it reads what it wrote
+
+### Two segmentations, on purpose
+
+Because the timeline and `detailed.csv` are derived separately, the script
+contains two implementations of the "cut a site's span at NLCD boundaries" idea,
+and they deliberately differ:
+
+- `build_segmented_timeline_html()` **merges** adjacent periods that share a
+  land-use class, so a bar is drawn per visible change
+- the `detailed_rows` loop in `export_enriched_data()` emits **one row per NLCD
+  snapshot period**, whether or not the class changed
+
+That is why the current data yields 211 rows in `detailed.csv` but only 75 bars
+in the timeline: 67 sites, most of whose land-use never changed, collapse to one
+bar each. The extra granularity in the CSV is intended, but note that a change to
+how spans are cut has to be made in both places — nothing cross-checks them.
 
 # NLCD Land-Use Data
 
@@ -118,7 +197,11 @@ For each site, the script:
 # Updating Data
 # Adding New Sites or Updating Existing Data
 
-1. **Update the CSV file**: Edit `data/arthros_temporal.csv` with new or updated site information
+1. **Add or replace the study files**: Drop the updated sampling CSV and its
+   location GeoJSON into `data/`. A new study needs no code change, provided its
+   CSV has `site_code` and `sample_date` columns and its GeoJSON features carry
+   a `site_code` property; the build reports any sampled site it could not
+   place, and any location with no sampling records
 2. **Run the script**: Execute `python build_timeline.py`
 3. **View results**: Open `build/index.html` to see the updated visualization
 

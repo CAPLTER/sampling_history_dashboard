@@ -1,10 +1,17 @@
+import json
 import logging
+import math
 import warnings
 from pathlib import Path
 
 import pandas as pd
 import plotly.express as px
+from plotly.offline import get_plotlyjs_version
 from pygeohydro import nlcd as nlcd_mod
+
+# Pin the CDN bundle to the plotly.js that generated the figure JSON, so the
+# page can never drift from the installed plotly version
+PLOTLYJS_VERSION = get_plotlyjs_version()
 
 warnings.filterwarnings(
     "ignore",
@@ -54,6 +61,301 @@ LANDUSE_COLORS = {
     "Other": "#6b7280",
     "Unknown": "#9ca3af",
 }
+
+# The dashboard is built straight from the raw study files in data/:
+#   * sampling CSVs, one row per organism record, carrying site_code and
+#     sample_date (e.g. 41_core_arthropods.csv)
+#   * location GeoJSONs describing where each site sits
+#     (e.g. 41_core_arthropods_locations.geojson)
+# Nothing below names a specific file, so dropping updated or additional study
+# files into data/ is all that is needed to refresh the dashboard. Files that
+# do not carry these columns are ignored.
+SAMPLING_CSV_COLUMNS = {"site_code", "sample_date"}
+
+# A sample_date counts as a sampling event when a trap was actually collected.
+# An empty trap is a real event with a real result and so stays in; these flags
+# mean no sample was obtained, or that the record is unusable.
+EXCLUDED_FLAGS = {"trap_not_collected", "miscoded", "empty_sampling_event"}
+
+# A site counts as having run to the end of the study when its last sampling
+# event falls within this window of the most recent event anywhere in the data.
+STUDY_END_WINDOW = pd.Timedelta(days=365)
+STATUS_TO_STUDY_END = "Sampled to study end"
+STATUS_RETIRED_EARLY = "Retired early"
+
+# The McDowell location file carries one polygon per *pair* of sites, keyed by a
+# composite name, and each polygon is only the bounding box of its two sites, so
+# per-site positions cannot be recovered from it. These ten were carried forward
+# from the project's earlier hand-distilled site table (arthros_temporal.csv),
+# which is the only surviving record of them; _check_paired_polygons() confirms
+# each still falls inside the polygon that covers it on every build.
+MCDOWELL_SITE_COORDS = {
+    "Bell": (33.64092797, -111.85715019),
+    "Gateway": (33.644507375, -111.84884062),
+    "Mine": (33.652722605, -111.788845595),
+    "Prospector": (33.65168216, -111.797182615),
+    "Rincon": (33.597271495, -111.810251345),
+    "Sunrise": (33.60752663, -111.804051625),
+    "Dixileta": (33.75610739, -111.844353495),
+    "LoneMtn": (33.76264058, -111.842862815),
+    "Paraiso": (33.693904995, -111.81341669),
+    "TomThumb": (33.691912325, -111.80063395),
+}
+
+# Which sites each composite polygon covers. Note that "DixieMine" in the
+# polygon name is the site coded "Mine" in the sampling CSV.
+PAIRED_POLYGON_MEMBERS = {
+    "Bell_Gateway": ("Bell", "Gateway"),
+    "DixieMine_Prospector": ("Mine", "Prospector"),
+    "Dixileta_LoneMtn": ("Dixileta", "LoneMtn"),
+    "Rincon_Sunrise": ("Rincon", "Sunrise"),
+    "TomThumb_Paraiso": ("TomThumb", "Paraiso"),
+}
+
+
+# Geometry of the drawn map. The height is fixed by the figure, but the width
+# follows the browser window, so the view is fitted to a deliberately narrow
+# viewport and wider windows simply show more surrounding context.
+MAP_HEIGHT = 460
+MAP_MARGIN = {"l": 0, "r": 0, "t": 40, "b": 0}
+MAP_TOP_MARGIN = MAP_MARGIN["t"]
+MAP_MIN_WIDTH_PX = 600
+MAP_TILE_SIZE = 512  # MapLibre's Web Mercator tile size
+MAP_PADDING = 1.15  # keep the outermost sites clear of the edges
+
+# Below this drawn width the legend is moved off the map and laid out beneath
+# it, where it needs this much room.
+LEGEND_REFLOW_PX = 560
+LEGEND_REFLOW_HEIGHT = 132
+
+
+def _mercator_y(lat: float) -> float:
+    """Web Mercator northing for a latitude, normalised to 0..1."""
+    radians = math.radians(lat)
+    return (1 - math.log(math.tan(radians) + 1 / math.cos(radians)) / math.pi) / 2
+
+
+def _mercator_lat(y: float) -> float:
+    """Inverse of _mercator_y()."""
+    return math.degrees(math.atan(math.sinh(math.pi * (1 - 2 * y))))
+
+
+def _fit_map_view(
+    lats: "pd.Series", lons: "pd.Series"
+) -> tuple[dict[str, float], float]:
+    """
+    Centre and zoom that keep every site inside the map.
+
+    Plotly has no fit-to-bounds for map subplots, so the view is derived from
+    the extent of the data. A fixed zoom cannot do this: it crops whichever
+    sites fall outside whatever the chosen level happens to cover.
+    """
+    lat_min, lat_max = float(lats.min()), float(lats.max())
+    lon_min, lon_max = float(lons.min()), float(lons.max())
+
+    # y grows southward, so the northern edge gives the smaller value
+    y_north, y_south = _mercator_y(lat_max), _mercator_y(lat_min)
+    span_x = max((lon_max - lon_min) / 360, 1e-9) * MAP_PADDING
+    span_y = max(y_south - y_north, 1e-9) * MAP_PADDING
+
+    zoom = min(
+        math.log2(MAP_MIN_WIDTH_PX / (MAP_TILE_SIZE * span_x)),
+        math.log2((MAP_HEIGHT - MAP_TOP_MARGIN) / (MAP_TILE_SIZE * span_y)),
+    )
+    center = {
+        "lat": _mercator_lat((y_north + y_south) / 2),
+        "lon": (lon_min + lon_max) / 2,
+    }
+    return center, zoom
+
+
+def _polygon_centroid(ring: list[list[float]]) -> tuple[float, float]:
+    """Area-weighted centroid of a closed GeoJSON linear ring, as (lat, lon)."""
+    points = ring[:-1] if ring[0] == ring[-1] else ring
+    area = cx = cy = 0.0
+    for i in range(len(points)):
+        x0, y0 = points[i]
+        x1, y1 = points[(i + 1) % len(points)]
+        cross = x0 * y1 - x1 * y0
+        area += cross
+        cx += (x0 + x1) * cross
+        cy += (y0 + y1) * cross
+    area *= 0.5
+
+    if area == 0:  # degenerate ring; fall back to the mean vertex
+        return (
+            sum(p[1] for p in points) / len(points),
+            sum(p[0] for p in points) / len(points),
+        )
+    return cy / (6 * area), cx / (6 * area)
+
+
+def _feature_centroid(geometry: dict) -> tuple[float, float] | None:
+    """Representative (lat, lon) for a GeoJSON geometry, or None if unsupported."""
+    coords = geometry.get("coordinates")
+    if not coords:
+        return None
+
+    geom_type = geometry.get("type")
+    if geom_type == "Point":
+        return coords[1], coords[0]
+    if geom_type == "Polygon":
+        return _polygon_centroid(coords[0])
+    if geom_type == "MultiPolygon":
+        return _polygon_centroid(coords[0][0])
+
+    logging.warning("Unsupported geometry type %r; skipping feature", geom_type)
+    return None
+
+
+def _check_paired_polygons(
+    paired_rings: dict[str, list[list[float]]],
+    locations: dict[str, tuple[float, float]],
+) -> None:
+    """
+    Guard MCDOWELL_SITE_COORDS against drift.
+
+    Those coordinates are maintained by hand, so confirm each one still falls
+    inside the polygon that is supposed to cover it, and complain about any
+    paired location this script does not know how to split into sites.
+    """
+    for name, ring in paired_rings.items():
+        members = PAIRED_POLYGON_MEMBERS.get(name)
+        if members is None:
+            logging.warning(
+                "Paired location %r has no entry in PAIRED_POLYGON_MEMBERS; its "
+                "sites will have no coordinates unless listed in MCDOWELL_SITE_COORDS",
+                name,
+            )
+            continue
+
+        lons = [p[0] for p in ring]
+        lats = [p[1] for p in ring]
+        for site in members:
+            point = locations.get(site)
+            if point is None:
+                logging.warning(
+                    "Polygon %r covers site %r, which has no coordinate", name, site
+                )
+            elif not (
+                min(lats) <= point[0] <= max(lats)
+                and min(lons) <= point[1] <= max(lons)
+            ):
+                logging.warning(
+                    "Coordinate for %r lies outside polygon %r; check "
+                    "MCDOWELL_SITE_COORDS against the location file",
+                    site,
+                    name,
+                )
+
+
+def load_site_locations(data_dir: Path) -> dict[str, tuple[float, float]]:
+    """
+    Read every *.geojson in data_dir and return {site_code: (lat, lon)}.
+
+    Features keyed by `site_code` describe a single site and place it at the
+    polygon centroid. Features keyed by `sampling_location` cover a pair of
+    sites and are used only to validate the hand-kept McDowell coordinates.
+    """
+    locations: dict[str, tuple[float, float]] = {}
+    paired_rings: dict[str, list[list[float]]] = {}
+
+    for path in sorted(data_dir.glob("*.geojson")):
+        features = json.loads(path.read_text(encoding="utf-8")).get("features", [])
+        for feature in features:
+            props = feature.get("properties") or {}
+            geometry = feature.get("geometry") or {}
+
+            if "site_code" in props:
+                centre = _feature_centroid(geometry)
+                if centre is not None:
+                    locations[props["site_code"]] = centre
+            elif "sampling_location" in props and geometry.get("type") == "Polygon":
+                paired_rings[props["sampling_location"]] = geometry["coordinates"][0]
+
+        logging.info("Read %d location features from %s", len(features), path.name)
+
+    locations.update(MCDOWELL_SITE_COORDS)
+    _check_paired_polygons(paired_rings, locations)
+    return locations
+
+
+def load_sampling_spans(data_dir: Path) -> pd.DataFrame:
+    """
+    Read every sampling CSV in data_dir and return one row per site giving the
+    first and last date on which that site was sampled.
+    """
+    frames = []
+
+    for path in sorted(data_dir.glob("*.csv")):
+        columns = set(pd.read_csv(path, nrows=0).columns)
+        if not SAMPLING_CSV_COLUMNS.issubset(columns):
+            logging.info("Skipping %s: not a sampling table", path.name)
+            continue
+
+        frame = pd.read_csv(
+            path,
+            usecols=sorted(SAMPLING_CSV_COLUMNS | (columns & {"flags"})),
+            parse_dates=["sample_date"],
+        )
+        kept = frame[~frame.get("flags", pd.Series(dtype=object)).isin(EXCLUDED_FLAGS)]
+        logging.info(
+            "Read %d sampling records from %s (%d excluded by flag)",
+            len(kept),
+            path.name,
+            len(frame) - len(kept),
+        )
+        frames.append(kept[["site_code", "sample_date"]])
+
+    if not frames:
+        raise FileNotFoundError(
+            f"No sampling CSVs found in {data_dir}; expected files with "
+            f"{sorted(SAMPLING_CSV_COLUMNS)} columns"
+        )
+
+    records = pd.concat(frames, ignore_index=True).dropna(subset=["sample_date"])
+    return (
+        records.groupby("site_code")["sample_date"]
+        .agg(start_date="min", end_date="max")
+        .reset_index()
+    )
+
+
+def build_site_table(data_dir: Path) -> pd.DataFrame:
+    """
+    Assemble one row per site: its sampling span from the sampling CSVs and its
+    position from the location GeoJSONs.
+    """
+    df = load_sampling_spans(data_dir)
+    locations = load_site_locations(data_dir)
+
+    df["lat"] = df["site_code"].map(lambda s: locations.get(s, (None, None))[0])
+    df["long"] = df["site_code"].map(lambda s: locations.get(s, (None, None))[1])
+
+    unplaced = sorted(df.loc[df["lat"].isna(), "site_code"])
+    if unplaced:
+        logging.warning(
+            "No coordinates for %d sampled site(s): %s",
+            len(unplaced),
+            ", ".join(unplaced),
+        )
+
+    unsampled = sorted(set(locations) - set(df["site_code"]))
+    if unsampled:
+        logging.info(
+            "%d located site(s) have no sampling records: %s",
+            len(unsampled),
+            ", ".join(unsampled),
+        )
+
+    # Sites sampled right up to the end of the study, versus retired before it
+    study_end = df["end_date"].max()
+    df["status"] = (df["end_date"] >= study_end - STUDY_END_WINDOW).map(
+        {True: STATUS_TO_STUDY_END, False: STATUS_RETIRED_EARLY}
+    )
+
+    return df.sort_values("site_code").reset_index(drop=True)
+
 
 def _choose_nlcd_year(sample_year: int | None, available_years: list[int]) -> int:
     """
@@ -113,8 +415,6 @@ def enrich_with_land_use(df: pd.DataFrame) -> tuple[pd.DataFrame, dict[int, dict
             region="L48",
         )
 
-        today_year = pd.Timestamp.today().year
-
         # Map from df index -> {year: code}
         for idx, row in zip(df_valid.index, nlcd_gdf.itertuples()):
             year_to_code = {}
@@ -133,7 +433,7 @@ def enrich_with_land_use(df: pd.DataFrame) -> tuple[pd.DataFrame, dict[int, dict
             end_date = df.at[idx, "end_date"]
 
             start_year = int(start_date.year) if pd.notna(start_date) else None
-            end_year = int(end_date.year) if pd.notna(end_date) else today_year
+            end_year = int(end_date.year) if pd.notna(end_date) else None
 
             start_snap = _choose_nlcd_year(start_year, years_avail)
             end_snap = _choose_nlcd_year(end_year, years_avail)
@@ -194,12 +494,11 @@ def build_segmented_timeline_html(
         codes = codes_by_index.get(idx)
 
         start_date = row["start_date"]
-        end_date = row["end_date"]  # Actual end date (may be NaN for active sites)
-        end_for_plot = row["end_for_plot"]  # end_date or today for active sites
+        end_date = row["end_date"]  # last date this site was sampled
  #validation check (skips sites with no NLCD data)
         if codes is None or not codes:
             continue
-        if pd.isna(start_date) or pd.isna(end_for_plot):
+        if pd.isna(start_date) or pd.isna(end_date):
             continue
         years_avail = sorted(codes.keys())
         if not years_avail:
@@ -211,7 +510,7 @@ def build_segmented_timeline_html(
 
         # Show ALL land-use changes during site's active period
         boundaries = [pd.Timestamp(year=y, month=1, day=1) for y in relevant_snapshots]
-        site_end_date = end_date if pd.notna(end_date) else end_for_plot
+        site_end_date = end_date
 
         def get_land_use(year):
             return _code_to_label(codes.get(year)) or "Unknown"
@@ -301,7 +600,7 @@ def build_segmented_timeline_html(
 
     if not rows:
         logging.warning("No rows built for segmented land-use timeline.")
-        return "<!-- empty timeline -->"
+        return "<!-- empty timeline -->", 600
 
     # Clean up segments: merge adjacent segments with same land-use
     seg_df = pd.DataFrame(rows).sort_values(["site_code", "segment_start"])
@@ -489,7 +788,16 @@ def build_segmented_timeline_html(
         ],
     )
 
-    return fig.to_html(full_html=False, include_plotlyjs=False, div_id="timeline-plot")
+    html = fig.to_html(
+        full_html=False,
+        include_plotlyjs=False,
+        div_id="timeline-plot",
+        config={"responsive": True},
+    )
+    # The height is driven by the number of sites, so the container is sized to
+    # match it: a responsive plot is resized to its container, and a shorter one
+    # would start dropping site labels.
+    return html, calculated_height
 
 def build_map_html(df: pd.DataFrame) -> str:
     df = df.copy()
@@ -498,27 +806,34 @@ def build_map_html(df: pd.DataFrame) -> str:
     df = df.dropna(subset=["lat", "long"])
 
     if df.empty:
-        return "<!-- empty map -->"
+        return "<!-- empty map -->", None
 
- # calculate center of map
-    center_lat = df["lat"].mean()
-    center_lon = df["long"].mean()
+    # Initial framing for first paint; refit_map() in the page then refits this
+    # to whatever size the map is actually drawn at on the reader's screen.
+    center, zoom = _fit_map_view(df["lat"], df["long"])
+    bounds = {
+        "latMin": float(df["lat"].min()),
+        "latMax": float(df["lat"].max()),
+        "lonMin": float(df["long"].min()),
+        "lonMax": float(df["long"].max()),
+    }
 
     df["land_use"] = df["land_use"].fillna("Unknown")
 
     df["start_date_formatted"] = df["start_date"].dt.strftime("%Y-%m-%d")
-    df["end_date_formatted"] = df["end_date"].dt.strftime("%Y-%m-%d").fillna("Active")
+    df["end_date_formatted"] = df["end_date"].dt.strftime("%Y-%m-%d")
 
-    fig = px.scatter_mapbox(
+    fig = px.scatter_map(
         df,
         lat="lat",
         lon="long",
         hover_name="site_code",
         color="land_use",
         color_discrete_map=LANDUSE_COLORS,
-        zoom=9,
-        center={"lat": center_lat, "lon": center_lon},
-        height=460,
+        zoom=zoom,
+        center=center,
+        # No explicit height: Plotly only lets a responsive plot follow its
+        # container's height when the layout does not pin one.
         hover_data={
             "land_use": True,
             "status": True,
@@ -531,7 +846,10 @@ def build_map_html(df: pd.DataFrame) -> str:
     )
 
     fig.update_traces(
-        marker=dict(size=8, opacity=0.9),
+        # Some sites are only a few hundred metres apart (Rincon/Sunrise, the
+        # NDV cluster, MVLH2/VALLUT) and their markers overlap until the reader
+        # zooms in; the slight transparency keeps a stack of them legible.
+        marker=dict(size=8, opacity=0.85),
         hovertemplate=(
             "<b>%{hovertext}</b><br><br>"
             "land_use=%{customdata[0]}<br>"
@@ -542,27 +860,38 @@ def build_map_html(df: pd.DataFrame) -> str:
     )
 
     fig.update_layout(
-        mapbox_style="carto-positron",
-        margin=dict(l=0, r=0, t=40, b=0),
+        # MapLibre basemap; resolves to CARTO's vector style, which needs no
+        # API key (the legacy raster tiles are now watermarked without one)
+        map_style="carto-positron",
+        margin=MAP_MARGIN,
         legend_title_text="Land-use class (latest snapshot)",
         font=dict(
             family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
             size=11,
         ),
+        # Sit the legend on top of the map rather than beside it. Beside it, the
+        # legend claimed a fixed ~200px that the map could not use, which ate
+        # most of the width on a small screen.
         legend=dict(
             orientation="v",
             yanchor="top",
-            y=1,
-            xanchor="left",
-            x=1.02,
+            y=0.98,
+            xanchor="right",
+            x=0.995,
             font=dict(size=10),
-            bgcolor="rgba(255,255,255,0.8)",
-            bordercolor="rgba(200,200,200,0.3)",
+            bgcolor="rgba(255,255,255,0.82)",
+            bordercolor="rgba(200,200,200,0.35)",
             borderwidth=1,
         ),
     )
 
-    return fig.to_html(full_html=False, include_plotlyjs=False, div_id="map-plot")
+    html = fig.to_html(
+        full_html=False,
+        include_plotlyjs=False,
+        div_id="map-plot",
+        config={"responsive": True},
+    )
+    return html, bounds
 
 def export_enriched_data(
     df: pd.DataFrame, codes_by_index: dict[int, dict[int, int]], output_dir: Path
@@ -630,20 +959,19 @@ def export_enriched_data(
         
         start_date = row["start_date"]
         end_date = row["end_date"]
-        end_for_plot = row["end_for_plot"]
         lat = row.get("lat", pd.NA)
         long = row.get("long", pd.NA)
-        
+
         if codes is None or not codes:
             continue
-        if pd.isna(start_date) or pd.isna(end_for_plot):
+        if pd.isna(start_date) or pd.isna(end_date):
             continue
         
         years_avail = sorted(codes.keys())
         if not years_avail:
             continue
         
-        actual_end = end_date if pd.notna(end_date) else end_for_plot
+        actual_end = end_date
         relevant_snapshots = sorted([y for y in NLCD_YEARS if y in years_avail])
         
         if not relevant_snapshots:
@@ -717,14 +1045,26 @@ def export_enriched_data(
         print(f"\nNo sites with land-use changes detected")
 
 
-def build_full_page(timeline_html: str, map_html: str) -> str:
+def build_full_page(
+    timeline_html: str,
+    timeline_height: int,
+    map_html: str,
+    map_bounds: dict[str, float] | None,
+) -> str:
     """HTML wrapper with timeline above map."""
+    map_bounds_js = json.dumps(map_bounds) if map_bounds else "null"
+    map_padding = MAP_PADDING
+    map_tile_size = MAP_TILE_SIZE
+    map_margin_js = json.dumps(MAP_MARGIN)
+    legend_reflow_px = LEGEND_REFLOW_PX
+    legend_reflow_height = LEGEND_REFLOW_HEIGHT
+
     page = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <title>CAP LTER – Arthropod Timeline & Map</title>
-  <script src="https://cdn.plot.ly/plotly-3.0.0.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-{PLOTLYJS_VERSION}.min.js"></script>
   <style>
     :root {{
       --accent: #0f766e;
@@ -747,7 +1087,7 @@ def build_full_page(timeline_html: str, map_html: str) -> str:
       color: var(--text-main);
     }}
     .page {{
-      max-width: 1100px;
+      max-width: min(1600px, 100%);
       margin: 0 auto;
     }}
     .badge {{
@@ -819,21 +1159,26 @@ def build_full_page(timeline_html: str, map_html: str) -> str:
       font-weight: 600;
       color: var(--accent);
     }}
+    /* Both plots are responsive, so Plotly sizes them to these containers. */
     #timeline-container {{
       width: 100%;
-      min-height: 600px;
-      /* Allow container to grow with plot height, scrolling if needed */
+      /* one row per site, so the height is set by the data, not the viewport */
+      height: {timeline_height}px;
     }}
     #map-container {{
       width: 100%;
-      height: 460px;
+      height: clamp(340px, 58vh, 760px);
+    }}
+    #timeline-plot {{
+      width: 100%;
+    }}
+    #map-plot {{
+      width: 100%;
+      height: 100%;
     }}
     @media (max-width: 900px) {{
       body {{
         padding: 16px;
-      }}
-      #timeline-container {{
-        height: 620px;
       }}
     }}
   </style>
@@ -859,13 +1204,103 @@ def build_full_page(timeline_html: str, map_html: str) -> str:
       <p class="card-sub" style="margin: 0 0 10px 0;">Arthropod Sampling Sites (Land-Use context with latest NLCD)</p>
       <p class="card-sub">
         Points are colored by the most recent NLCD land-use class at each site location.
-        Hover to see site name, sampling dates, and whether sampling is still active
+        Hover to see site name and sampling dates. Some sites lie within a few hundred
+        metres of each other and their markers merge until you zoom in.
       </p>
       <div id="map-container">
         {map_html}
       </div>
     </div>
   </div>
+  <script>
+    // Refit the map to the size it is actually drawn at. A zoom level baked in
+    // at build time only suits the viewport it was computed for and crops sites
+    // on any smaller one, so the fit is redone here and on every resize.
+    (function () {{
+      var BOUNDS = {map_bounds_js};
+      var PADDING = {map_padding};
+      var TILE = {map_tile_size};
+      var MARGIN = {map_margin_js};
+      if (!BOUNDS) return;
+
+      function mercatorY(lat) {{
+        var r = lat * Math.PI / 180;
+        return (1 - Math.log(Math.tan(r) + 1 / Math.cos(r)) / Math.PI) / 2;
+      }}
+      function mercatorLat(y) {{
+        return Math.atan(Math.sinh(Math.PI * (1 - 2 * y))) * 180 / Math.PI;
+      }}
+
+      var userInteracted = false;
+
+      function applyFit() {{
+        var gd = document.getElementById('map-plot');
+        if (userInteracted || !gd || !gd.data || typeof Plotly === 'undefined') return;
+
+        // On a narrow screen a legend sitting on the map covers most of it, so
+        // lay it out below the map instead and give it room in the margin.
+        var narrow = gd.clientWidth < {legend_reflow_px};
+        var marginB = narrow ? {legend_reflow_height} : MARGIN.b;
+
+        var width = gd.clientWidth - MARGIN.l - MARGIN.r;
+        var height = gd.clientHeight - MARGIN.t - marginB;
+        if (width <= 0 || height <= 0) return;
+
+        var yNorth = mercatorY(BOUNDS.latMax);
+        var ySouth = mercatorY(BOUNDS.latMin);
+        var spanX = Math.max((BOUNDS.lonMax - BOUNDS.lonMin) / 360, 1e-9) * PADDING;
+        var spanY = Math.max(ySouth - yNorth, 1e-9) * PADDING;
+
+        Plotly.relayout(gd, {{
+          'map.center': {{
+            lat: mercatorLat((yNorth + ySouth) / 2),
+            lon: (BOUNDS.lonMin + BOUNDS.lonMax) / 2
+          }},
+          'map.zoom': Math.min(
+            Math.log2(width / (TILE * spanX)),
+            Math.log2(height / (TILE * spanY))
+          ),
+          'margin.b': marginB,
+          'legend.orientation': narrow ? 'h' : 'v',
+          'legend.x': narrow ? 0 : 0.995,
+          'legend.xanchor': narrow ? 'left' : 'right',
+          'legend.y': narrow ? -0.02 : 0.98,
+          'legend.bgcolor': narrow ? 'rgba(255,255,255,0)' : 'rgba(255,255,255,0.82)',
+          'legend.bordercolor': narrow ? 'rgba(0,0,0,0)' : 'rgba(200,200,200,0.35)',
+          'legend.font.size': narrow ? 9 : 10,
+          'legend.entrywidth': narrow ? 0 : null
+        }});
+      }}
+
+      // MapLibre refuses camera changes until its style has finished loading,
+      // and there is no public event for that, so the fit is reapplied a few
+      // times on a decaying schedule. Each call is idempotent.
+      function refitRepeatedly() {{
+        [400, 1200, 2500, 5000].forEach(function (delay) {{
+          setTimeout(applyFit, delay);
+        }});
+      }}
+
+      var pending;
+      function scheduleRefit() {{
+        clearTimeout(pending);
+        pending = setTimeout(applyFit, 200);
+      }}
+
+      refitRepeatedly();
+      window.addEventListener('resize', scheduleRefit);
+
+      // Once the reader has panned or zoomed, leave their view alone
+      var container = document.getElementById('map-container');
+      ['mousedown', 'wheel', 'touchstart'].forEach(function (evt) {{
+        container.addEventListener(evt, function () {{
+          userInteracted = true;
+          window.removeEventListener('resize', scheduleRefit);
+          clearTimeout(pending);
+        }}, {{ once: true, passive: true }});
+      }});
+    }})();
+  </script>
 </body>
 </html>
 """
@@ -876,21 +1311,18 @@ def main():
     logging.basicConfig(level=logging.INFO)
 
     root = Path(__file__).parent
-    data_path = root / "data" / "arthros_temporal.csv"
+    data_dir = root / "data"
     build_dir = root / "build"
     build_dir.mkdir(exist_ok=True)
 
-    df = pd.read_csv(
-        data_path,
-        parse_dates=["start_date", "end_date"],
+    # One row per site, derived entirely from the raw study files in data/
+    df = build_site_table(data_dir)
+    logging.info(
+        "Site table: %d sites sampled %s to %s",
+        len(df),
+        df["start_date"].min().date(),
+        df["end_date"].max().date(),
     )
-
-    # Status: Active if end_date is missing
-    df["status"] = df["end_date"].isna().map({True: "Active", False: "Ended"})
-
-    # For plotting, replace missing end_date with today
-    today = pd.Timestamp.today().normalize()
-    df["end_for_plot"] = df["end_date"].fillna(today)
 
     # Add NLCD land-use info + codes_by_index
     df, codes_by_index = enrich_with_land_use(df)
@@ -899,11 +1331,11 @@ def main():
     export_enriched_data(df, codes_by_index, build_dir)
 
     # Build HTML snippets
-    timeline_html = build_segmented_timeline_html(df, codes_by_index)
-    map_html = build_map_html(df)
+    timeline_html, timeline_height = build_segmented_timeline_html(df, codes_by_index)
+    map_html, map_bounds = build_map_html(df)
 
     # Build full page
-    full_page = build_full_page(timeline_html, map_html)
+    full_page = build_full_page(timeline_html, timeline_height, map_html, map_bounds)
 
     out_path = build_dir / "index.html"
     out_path.write_text(full_page, encoding="utf-8")
