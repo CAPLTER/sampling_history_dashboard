@@ -20,7 +20,18 @@ warnings.filterwarnings(
 )
 
 # NLCD snapshot years we will use
-NLCD_YEARS = [2001, 2006, 2011, 2016, 2019]
+NLCD_YEARS = [2001, 2006, 2011, 2016, 2019, 2021]
+
+# A committed lookup of NLCD codes keyed by coordinate, shared by every dataset
+# built from this repo. The MRLC service this queries is unreliable (observed
+# outright ServiceUnavailableError and incomplete responses during development),
+# so once a coordinate has been looked up it is never queried again: a build
+# with nothing new to look up has no network dependency at all. Keyed by
+# coordinate rather than site_code because the same site_code can denote a
+# different physical location in a different dataset (confirmed true of the
+# arthropod and bird site tables), so a site-keyed cache could silently mix
+# them up.
+NLCD_CACHE_PATH = Path(__file__).resolve().parent.parent / "nlcd_lookup.json"
 
 # Map NLCD numeric codes -> human-readable labels
 NLCD_LABELS = {
@@ -381,6 +392,93 @@ def _code_to_label(code: int | float | None) -> str | None:
     except Exception:
         return "Other"
 
+def _coord_key(lat: float, lon: float) -> str:
+    # 6 decimal places is ~0.1 m, far finer than coordinates need to be to
+    # select the right 30 m NLCD cell, and stable across runs since the
+    # upstream centroid math is itself deterministic.
+    return f"{lat:.6f},{lon:.6f}"
+
+
+def _load_nlcd_cache() -> dict[str, dict[str, int]]:
+    if NLCD_CACHE_PATH.exists():
+        return json.loads(NLCD_CACHE_PATH.read_text(encoding="utf-8"))
+    return {}
+
+
+def _save_nlcd_cache(cache: dict[str, dict[str, int]]) -> None:
+    NLCD_CACHE_PATH.write_text(
+        json.dumps(cache, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+
+
+def get_nlcd_codes(
+    coords: list[tuple[float, float]], years: list[int]
+) -> dict[tuple[float, float], dict[int, int]]:
+    """
+    NLCD cover code per (lat, lon) for each requested year, backed by the
+    committed cache at NLCD_CACHE_PATH.
+
+    Coordinates already in the cache for every requested year are returned
+    without any network access. Anything else is queried from the MRLC
+    service; on success the cache is updated and saved so the same
+    coordinates never need to be queried again. If the service is unavailable
+    or returns incomplete data for a coordinate not already cached, this
+    raises rather than returning partial results — a build should fail
+    outright rather than publish a page with silently missing land-use.
+    """
+    cache = _load_nlcd_cache()
+    result: dict[tuple[float, float], dict[int, int]] = {}
+    missing: list[tuple[float, float]] = []
+
+    for lat, lon in coords:
+        entry = cache.get(_coord_key(lat, lon), {})
+        codes = {y: entry[str(y)] for y in years if str(y) in entry}
+        if len(codes) == len(years):
+            result[(lat, lon)] = codes
+        else:
+            missing.append((lat, lon))
+
+    if not missing:
+        return result
+
+    logging.info(
+        "Querying NLCD for %d coordinate(s) not yet in %s",
+        len(missing),
+        NLCD_CACHE_PATH.name,
+    )
+    try:
+        nlcd_gdf = nlcd_mod.nlcd_bycoords(
+            [(lon, lat) for lat, lon in missing],
+            years={"cover": years},
+            region="L48",
+        )
+    except Exception as exc:
+        raise RuntimeError(
+            f"NLCD service unavailable and {len(missing)} coordinate(s) are not "
+            f"yet in {NLCD_CACHE_PATH.name}; cannot build without land-use data "
+            f"for: {missing[:5]}{' ...' if len(missing) > 5 else ''}. Once cached, "
+            f"a coordinate never depends on this service again."
+        ) from exc
+
+    for (lat, lon), row in zip(missing, nlcd_gdf.itertuples()):
+        codes = {y: getattr(row, f"cover_{y}") for y in years if hasattr(row, f"cover_{y}")}
+        if len(codes) < len(years):
+            raise RuntimeError(
+                f"NLCD service returned incomplete data for ({lat}, {lon}): "
+                f"got years {sorted(codes)}, need {years}"
+            )
+        result[(lat, lon)] = codes
+        cache.setdefault(_coord_key(lat, lon), {}).update(
+            {str(y): int(c) for y, c in codes.items()}
+        )
+
+    _save_nlcd_cache(cache)
+    logging.info(
+        "Saved %d new coordinate(s) to %s", len(missing), NLCD_CACHE_PATH.name
+    )
+    return result
+
+
 def enrich_with_land_use(df: pd.DataFrame) -> tuple[pd.DataFrame, dict[int, dict[int, int]]]:
 
     df = df.copy()
@@ -406,75 +504,63 @@ def enrich_with_land_use(df: pd.DataFrame) -> tuple[pd.DataFrame, dict[int, dict
         logging.warning("No valid lat/long values – skipping NLCD enrichment.")
         return df, codes_by_index
 
-    coords = list(zip(df_valid["long"], df_valid["lat"]))  # (lon, lat)
+    # get_nlcd_codes() raises if it cannot obtain real data for a coordinate
+    # (cached or freshly queried); a build must not silently continue with
+    # missing land-use, so no try/except sits around this call.
+    codes_by_coord = get_nlcd_codes(
+        list(zip(df_valid["lat"], df_valid["long"])), NLCD_YEARS
+    )
 
-    try:
-        nlcd_gdf = nlcd_mod.nlcd_bycoords(
-            coords,
-            years={"cover": NLCD_YEARS},
-            region="L48",
-        )
+    # Map from df index -> {year: code}
+    for idx, lat, lon in zip(df_valid.index, df_valid["lat"], df_valid["long"]):
+        year_to_code = codes_by_coord[(lat, lon)]
+        codes_by_index[idx] = year_to_code
 
-        # Map from df index -> {year: code}
-        for idx, row in zip(df_valid.index, nlcd_gdf.itertuples()):
-            year_to_code = {}
-            for year in NLCD_YEARS:
-                colname = f"cover_{year}"
-                if hasattr(row, colname):
-                    year_to_code[year] = getattr(row, colname)
-            codes_by_index[idx] = year_to_code
+        years_avail = sorted(year_to_code.keys())
 
-            if not year_to_code:
-                continue
+        start_date = df.at[idx, "start_date"]
+        end_date = df.at[idx, "end_date"]
 
-            years_avail = sorted(year_to_code.keys())
+        start_year = int(start_date.year) if pd.notna(start_date) else None
+        end_year = int(end_date.year) if pd.notna(end_date) else None
 
-            start_date = df.at[idx, "start_date"]
-            end_date = df.at[idx, "end_date"]
+        start_snap = _choose_nlcd_year(start_year, years_avail)
+        end_snap = _choose_nlcd_year(end_year, years_avail)
+        latest_snap = max(years_avail)
 
-            start_year = int(start_date.year) if pd.notna(start_date) else None
-            end_year = int(end_date.year) if pd.notna(end_date) else None
+        code_start = year_to_code.get(start_snap, pd.NA)
+        code_end = year_to_code.get(end_snap, pd.NA)
+        code_latest = year_to_code.get(latest_snap, pd.NA)
 
-            start_snap = _choose_nlcd_year(start_year, years_avail)
-            end_snap = _choose_nlcd_year(end_year, years_avail)
-            latest_snap = max(years_avail)
+        df.at[idx, "nlcd_code_start"] = code_start
+        df.at[idx, "nlcd_code_end"] = code_end
+        df.at[idx, "nlcd_code_latest"] = code_latest
 
-            code_start = year_to_code.get(start_snap, pd.NA)
-            code_end = year_to_code.get(end_snap, pd.NA)
-            code_latest = year_to_code.get(latest_snap, pd.NA)
+        label_start = _code_to_label(code_start)
+        label_end = _code_to_label(code_end)
+        label_latest = _code_to_label(code_latest)
 
-            df.at[idx, "nlcd_code_start"] = code_start
-            df.at[idx, "nlcd_code_end"] = code_end
-            df.at[idx, "nlcd_code_latest"] = code_latest
+        if label_start is not None:
+            df.at[idx, "land_use_start"] = label_start
+        if label_end is not None:
+            df.at[idx, "land_use_end"] = label_end
+        if label_latest is not None:
+            df.at[idx, "land_use"] = label_latest
 
-            label_start = _code_to_label(code_start)
-            label_end = _code_to_label(code_end)
-            label_latest = _code_to_label(code_latest)
-
-            if label_start is not None:
-                df.at[idx, "land_use_start"] = label_start
-            if label_end is not None:
-                df.at[idx, "land_use_end"] = label_end
-            if label_latest is not None:
-                df.at[idx, "land_use"] = label_latest
-
-        # Check if land-use changed across any NLCD snapshot years
-        # This is more comprehensive than just start vs end
-        for idx in df.index:
-            codes = codes_by_index.get(idx, {})
-            if codes:
-                land_use_values = []
-                for year in sorted(codes.keys()):
-                    code = codes[year]
-                    label = _code_to_label(code)
-                    if label:
-                        land_use_values.append(label)
-                # Check if there are multiple unique land-use values
-                unique_land_uses = set(land_use_values)
-                df.at[idx, "land_use_changed"] = len(unique_land_uses) > 1
-
-    except Exception as e:
-        logging.error(f"Failed to retrieve NLCD land-use data: {e}")
+    # Check if land-use changed across any NLCD snapshot years
+    # This is more comprehensive than just start vs end
+    for idx in df.index:
+        codes = codes_by_index.get(idx, {})
+        if codes:
+            land_use_values = []
+            for year in sorted(codes.keys()):
+                code = codes[year]
+                label = _code_to_label(code)
+                if label:
+                    land_use_values.append(label)
+            # Check if there are multiple unique land-use values
+            unique_land_uses = set(land_use_values)
+            df.at[idx, "land_use_changed"] = len(unique_land_uses) > 1
 
     return df, codes_by_index
 
