@@ -28,13 +28,14 @@ site and time period
 
 The code that is specific to this dataset lives here; everything reusable
 across datasets (NLCD enrichment, the timeline, the map, CSV export, the page
-shell) lives in `../pipeline.py`, shared with `../bird_timeline/`. See the
+shell) lives in `../common/pipeline.py`, shared with `../bird_timeline/`. See the
 top-level [README.md](../README.md) for how the pieces fit together.
 
 ```
 sampling_history_dashboard/
-├── pipeline.py             # Shared code (dataset-agnostic)
-├── nlcd_lookup.json        # Committed NLCD cache, shared across datasets
+├── common/
+│   ├── pipeline.py          # Shared code (dataset-agnostic)
+│   └── nlcd_lookup.json     # Committed NLCD cache, shared across datasets
 ├── build/
 │   ├── index.html          # This dataset's page (deployed to Pages)
 │   └── birds.html          # The bird dataset's page
@@ -181,12 +182,12 @@ detailed.csv
    end"; the rest are "Retired early"
 3. **NLCD Enrichment**: For each site, retrieves NLCD land-use data for all snapshot years
 4. **Outputs**: The timeline, the map, and the two CSVs are each derived from
-   the enriched table by shared code in `../pipeline.py`. `export_enriched_data()`
+   the enriched table by shared code in `../common/pipeline.py`. `export_enriched_data()`
    happens to run first, but nothing after it reads what it wrote
 
 ### Two segmentations, on purpose
 
-Because the timeline and `detailed.csv` are derived separately, `../pipeline.py`
+Because the timeline and `detailed.csv` are derived separately, `../common/pipeline.py`
 contains two implementations of the "cut a site's span at NLCD boundaries" idea,
 and they deliberately differ:
 
@@ -202,7 +203,7 @@ are cut has to be made in both places — nothing cross-checks them.
 
 # NLCD Land-Use Data
 
-The script uses the `pygeohydro` library to retrieve NLCD (National Land Cover Database) land-use classifications for each site location, via a lookup cache (`../nlcd_lookup.json`) shared with every other dataset built from this repo -- see [Updating the NLCD Cache](#updating-the-nlcd-cache). NLCD provides land cover data at multiple snapshot years: 2001, 2006, 2011, 2016, 2019, 2021 (Latest)
+The script uses the `pygeohydro` library to retrieve NLCD (National Land Cover Database) land-use classifications for each site location, via a lookup cache (`../common/nlcd_lookup.json`) shared with every other dataset built from this repo -- see [Updating the NLCD Cache](#updating-the-nlcd-cache). NLCD provides land cover data at multiple snapshot years: 2001, 2006, 2011, 2016, 2019, 2021 (Latest)
 
 For each site, the script:
 - Retrieves land-use data for all available snapshot years
@@ -229,7 +230,7 @@ The script automatically:
 # Adding New NLCD Snapshot Years
 
 If new NLCD snapshots are released (e.g., 2024, 2027), update the shared
-`NLCD_YEARS` constant in `../pipeline.py` (this affects every dataset):
+`NLCD_YEARS` constant in `../common/pipeline.py` (this affects every dataset):
 
 ```python
 NLCD_YEARS = [2001, 2006, 2011, 2016, 2019, 2021, 2024]  # Add new years here
@@ -237,7 +238,7 @@ NLCD_YEARS = [2001, 2006, 2011, 2016, 2019, 2021, 2024]  # Add new years here
 
 ### Updating the NLCD Cache
 
-NLCD lookups are backed by a committed cache, `../nlcd_lookup.json`, keyed by
+NLCD lookups are backed by a committed cache, `../common/nlcd_lookup.json`, keyed by
 coordinate and shared across every dataset in this repo (see the top-level
 [README.md](../README.md)). A coordinate already cached for every year in
 `NLCD_YEARS` is never re-queried, so a normal rebuild has no dependency on the
@@ -249,7 +250,7 @@ yet cached -- commit the updated `nlcd_lookup.json` alongside your change.
 # Configuration
 # Adjusting Timeline Appearance
 
-Key parameters that can be adjusted, mostly in `../pipeline.py` since the
+Key parameters that can be adjusted, mostly in `../common/pipeline.py` since the
 timeline itself is shared code:
 
 - **Bar thickness**: Modify `calculated_height = max(600, num_sites * 14)` - change the multiplier (14) to adjust bar thickness

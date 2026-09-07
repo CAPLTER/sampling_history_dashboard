@@ -12,28 +12,29 @@ The site publishes one page per monitoring program, sharing a nav bar:
 
 ```
 sampling_history_dashboard/
-├── pipeline.py             # Shared, dataset-agnostic build code
-├── nlcd_lookup.json        # Committed NLCD cache, shared across datasets
-├── build/                  # Deploy artifact -- HTML pages only, no data
+├── common/                  # Shared tools -- code used by every dataset
+│   ├── pipeline.py           # Dataset-agnostic build code
+│   └── nlcd_lookup.json      # Committed NLCD cache, shared across datasets
+├── build/                   # Deploy artifact -- HTML pages only, no data
 │   ├── index.html
 │   └── birds.html
-├── arthropod_timeline/      # Arthropod dataset: loader + raw data + CSV output
-└── bird_timeline/           # Bird dataset: loader + raw data + CSV output
+├── arthropod_timeline/       # Arthropod-specific: loader + raw data + CSV output
+└── bird_timeline/            # Bird-specific: loader + raw data + CSV output
 ```
 
 Each dataset directory has its own README with details specific to that
 dataset (input file formats, status labels, configuration). This file covers
 what's shared.
 
-### Why a shared `pipeline.py`
+### Why a shared `common/pipeline.py`
 
 Every dataset needs the same things done to it once it's in a standard shape
 (one row per site: `site_code`, `lat`, `long`, `start_date`, `end_date`,
 `status`): NLCD enrichment, a segmented timeline, a map, CSV export, and the
-page shell. `pipeline.py` holds all of that. Each dataset directory holds only
+page shell. `common/pipeline.py` holds all of that. Each dataset directory holds only
 the small, genuinely different part -- how to turn *that* dataset's raw files
 into the standard site table -- plus a short driver that calls into
-`pipeline.py`.
+`common/pipeline.py`.
 
 Adding a third monitoring program means writing a new loader next to
 `arthropod_timeline/` and `bird_timeline/`, not touching either of the
@@ -47,7 +48,7 @@ a different physical location in a different dataset -- confirmed true of the
 arthropod and bird site tables, which are otherwise entirely unrelated
 programs and must never be joined or deduplicated by `site_code`.
 
-A coordinate already cached for every year in `pipeline.NLCD_YEARS` is never
+A coordinate already cached for every year in `common.pipeline.NLCD_YEARS` is never
 re-queried, so an ordinary rebuild has no dependency on the NLCD service (the
 MRLC WMS endpoint this queries has been observed to fail outright or return
 incomplete data). Anything not yet cached is queried once; if the service is

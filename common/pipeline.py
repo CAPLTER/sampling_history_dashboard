@@ -913,6 +913,21 @@ def export_enriched_data(
         "nlcd_code_latest",
     ]
 
+    # A dataset's loader can add its own descriptive columns beyond the
+    # standard site-table shape (e.g. the bird dataset's location_type).
+    # Column order is deterministic (pandas preserves insertion order), so
+    # this reproduces the exact same summary_cols -- and hence byte-identical
+    # output -- for any dataset whose loader adds nothing extra.
+    enrichment_only_cols = {
+        "nlcd_code_start", "nlcd_code_end", "nlcd_code_latest",
+        "land_use_start", "land_use_end", "land_use", "land_use_changed",
+    }
+    extra_cols = [
+        c for c in df.columns
+        if c not in summary_cols and c not in enrichment_only_cols
+    ]
+    summary_cols[4:4] = extra_cols  # right after "status"
+
     # Add NLCD year columns for each snapshot
     for year in NLCD_YEARS:
         summary_cols.append(f"nlcd_code_{year}")
