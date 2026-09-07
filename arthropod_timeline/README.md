@@ -26,21 +26,30 @@ site and time period
 
 ## Project Structure
 
+The code that is specific to this dataset lives here; everything reusable
+across datasets (NLCD enrichment, the timeline, the map, CSV export, the page
+shell) lives in `../pipeline.py`, shared with `../bird_timeline/`. See the
+top-level [README.md](../README.md) for how the pieces fit together.
+
 ```
-arthropod_timeline/
-├── build_timeline.py      # Main script that generates the visualization
-├── data/                  # Raw study files (see "Input Data")
-│   ├── 41_core_arthropods.csv
-│   ├── 41_core_arthropods_locations.geojson
-│   ├── 643_mcdowell_pitfall_arthropods.csv
-│   └── 643_mcdowell_arthropod_locations.geojson
+sampling_history_dashboard/
+├── pipeline.py             # Shared code (dataset-agnostic)
+├── nlcd_lookup.json        # Committed NLCD cache, shared across datasets
 ├── build/
-│   ├── index.html         # Generated HTML visualization page
-│   ├── summary.csv        # One row per site with summary information
-│   └── detailed.csv       # One row per land-use segment showing all changes
-├── cache/                 # Cached NLCD data (created automatically)
-├── requirements.txt       # Python dependencies
-└── README.md             
+│   ├── index.html          # This dataset's page (deployed to Pages)
+│   └── birds.html          # The bird dataset's page
+└── arthropod_timeline/
+    ├── build_timeline.py    # This dataset's loader + driver
+    ├── data/                # Raw study files (see "Input Data")
+    │   ├── 41_core_arthropods.csv
+    │   ├── 41_core_arthropods_locations.geojson
+    │   ├── 643_mcdowell_pitfall_arthropods.csv
+    │   └── 643_mcdowell_arthropod_locations.geojson
+    ├── output/              # Generated CSVs -- not served on the website
+    │   ├── summary.csv      # One row per site with summary information
+    │   └── detailed.csv     # One row per land-use segment showing all changes
+    ├── requirements.txt     # Python dependencies
+    └── README.md
 ```
 
 ## Installation
@@ -66,13 +75,14 @@ pip install pandas plotly pygeohydro
 ### Running the Script
 
 1. Ensure the study files are in `data/` (see [Input Data](#input-data))
-2. Run the script:
+2. Run the script from this directory:
 ```bash
 python build_timeline.py
 ```
 
-3. The generated visualization will be saved to `build/index.html`
-4. Open `build/index.html` in a web browser to view the visualization
+3. The generated visualization is saved to `../build/index.html` (a directory
+   shared with the bird dataset); the CSVs are saved to `output/`
+4. Open `../build/index.html` in a web browser to view the visualization
 
 ### Input Data
 
@@ -114,13 +124,18 @@ name is the site coded `Mine` in the sampling CSV; that pairing lives in
 
 ### Output Files
 
-The script generates three output files in the `build/` directory. All three are
-**independent products of the same in-memory table** — none is an input to
-another. In particular, the CSVs are *not* read when the visualization is built:
-`index.html` is rendered straight from the enriched site table, so deleting both
-CSVs would leave the page byte-identical. They exist to publish the underlying
-numbers, and the deploy workflow uploads the whole `build/` directory, so both
-are downloadable from the live site alongside the page.
+The script generates three output files, split across two directories. All
+three are **independent products of the same in-memory table** — none is an
+input to another. In particular, the CSVs are *not* read when the
+visualization is built: `index.html` is rendered straight from the enriched
+site table, so deleting both CSVs would leave the page byte-identical.
+
+- `../build/index.html` is the only one served on the website. `build/` is
+  shared with the bird dataset and is exactly what the deploy workflow
+  uploads to GitHub Pages, so it holds nothing but the HTML pages.
+- `output/summary.csv` and `output/detailed.csv` publish the underlying
+  numbers for anyone working with the repository directly; they are not part
+  of the website.
 
 1. **index.html**: Interactive visualization page with timeline and map
 2. **summary.csv**: Summary data with one row per site, including:
@@ -166,12 +181,12 @@ detailed.csv
    end"; the rest are "Retired early"
 3. **NLCD Enrichment**: For each site, retrieves NLCD land-use data for all snapshot years
 4. **Outputs**: The timeline, the map, and the two CSVs are each derived from
-   the enriched table. `export_enriched_data()` happens to run first, but nothing
-   after it reads what it wrote
+   the enriched table by shared code in `../pipeline.py`. `export_enriched_data()`
+   happens to run first, but nothing after it reads what it wrote
 
 ### Two segmentations, on purpose
 
-Because the timeline and `detailed.csv` are derived separately, the script
+Because the timeline and `detailed.csv` are derived separately, `../pipeline.py`
 contains two implementations of the "cut a site's span at NLCD boundaries" idea,
 and they deliberately differ:
 
@@ -180,14 +195,14 @@ and they deliberately differ:
 - the `detailed_rows` loop in `export_enriched_data()` emits **one row per NLCD
   snapshot period**, whether or not the class changed
 
-That is why the current data yields 211 rows in `detailed.csv` but only 75 bars
-in the timeline: 67 sites, most of whose land-use never changed, collapse to one
-bar each. The extra granularity in the CSV is intended, but note that a change to
-how spans are cut has to be made in both places — nothing cross-checks them.
+That means `detailed.csv` will always have more rows than the timeline draws
+bars: most sites' land-use never changed, so they collapse to one bar each. The
+extra granularity in the CSV is intended, but note that a change to how spans
+are cut has to be made in both places — nothing cross-checks them.
 
 # NLCD Land-Use Data
 
-The script uses the `pygeohydro` library to retrieve NLCD (National Land Cover Database) land-use classifications for each site location. NLCD provides land cover data at multiple snapshot years: 2001, 2006, 2011, 2016, 2019 (Latest)
+The script uses the `pygeohydro` library to retrieve NLCD (National Land Cover Database) land-use classifications for each site location, via a lookup cache (`../nlcd_lookup.json`) shared with every other dataset built from this repo -- see [Updating the NLCD Cache](#updating-the-nlcd-cache). NLCD provides land cover data at multiple snapshot years: 2001, 2006, 2011, 2016, 2019, 2021 (Latest)
 
 For each site, the script:
 - Retrieves land-use data for all available snapshot years
@@ -203,7 +218,7 @@ For each site, the script:
    a `site_code` property; the build reports any sampled site it could not
    place, and any location with no sampling records
 2. **Run the script**: Execute `python build_timeline.py`
-3. **View results**: Open `build/index.html` to see the updated visualization
+3. **View results**: Open `../build/index.html` to see the updated visualization
 
 The script automatically:
 - Detects all sites in the data
@@ -213,20 +228,38 @@ The script automatically:
 
 # Adding New NLCD Snapshot Years
 
-If new NLCD snapshots are released (e.g., 2024, 2027), update the `NLCD_YEARS` constant in `build_timeline.py`:
+If new NLCD snapshots are released (e.g., 2024, 2027), update the shared
+`NLCD_YEARS` constant in `../pipeline.py` (this affects every dataset):
 
 ```python
-NLCD_YEARS = [2001, 2006, 2011, 2016, 2019, 2024]  # Add new years here
+NLCD_YEARS = [2001, 2006, 2011, 2016, 2019, 2021, 2024]  # Add new years here
 ```
+
+### Updating the NLCD Cache
+
+NLCD lookups are backed by a committed cache, `../nlcd_lookup.json`, keyed by
+coordinate and shared across every dataset in this repo (see the top-level
+[README.md](../README.md)). A coordinate already cached for every year in
+`NLCD_YEARS` is never re-queried, so a normal rebuild has no dependency on the
+NLCD service at all. Running the script after adding new sites or new years
+queries the service only for what is missing, updates the cache file, and
+raises rather than continuing if the service is unavailable for something not
+yet cached -- commit the updated `nlcd_lookup.json` alongside your change.
+
 # Configuration
 # Adjusting Timeline Appearance
 
-Key parameters in `build_timeline.py` that can be adjusted:
+Key parameters that can be adjusted, mostly in `../pipeline.py` since the
+timeline itself is shared code:
 
 - **Bar thickness**: Modify `calculated_height = max(600, num_sites * 14)` - change the multiplier (14) to adjust bar thickness
 - **Font sizes**: Adjust `tickfont=dict(size=8)` for y-axis labels
 - **Margins**: Modify `margin=dict(l=140, r=40, t=100, b=50)` for spacing
 - **Colors**: Update `LANDUSE_COLORS` dictionary to change color scheme
+
+Parameters that stay specific to this dataset live in `build_timeline.py`:
+`EXCLUDED_FLAGS`, `STUDY_END_WINDOW`, the status labels, and
+`MCDOWELL_SITE_COORDS`.
 
 # Technical Details
 # Dependencies
