@@ -266,12 +266,14 @@ Parameters that stay specific to this dataset live in `build_timeline.py`:
 # Dependencies
 
 - **pandas** (>=2.0.0): Data manipulation and CSV handling
-- **plotly** (>=5.0.0): Interactive visualization library
+- **plotly** (>=5.24.0): Interactive visualization library (needs `px.scatter_map`)
 - **pygeohydro** (>=0.14.0): NLCD data retrieval from USGS
 
 # Performance Notes
 
-- **First Run**: May take longer as NLCD data is downloaded and cached
-- **Subsequent Runs**: Faster due to caching (data stored in `cache/` directory)
-- **Internet Required**: Script needs internet access to download NLCD data
+- **First run for a new site**: Needs internet access, to query the MRLC
+  service once for that coordinate
+- **Every run after that**: No internet dependency at all -- every coordinate
+  already looked up is served from `../common/nlcd_lookup.json`, which is
+  committed to the repo (see [Updating the NLCD Cache](#updating-the-nlcd-cache))
 - **Site Filtering**: Sites without valid coordinates are automatically skipped

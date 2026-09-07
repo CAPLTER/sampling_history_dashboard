@@ -29,15 +29,27 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: pip install -r arthropod_timeline/requirements.txt
+        run: |
+          pip install -r arthropod_timeline/requirements.txt
+          pip install -r bird_timeline/requirements.txt
 
-      - name: Build dashboard
+      # Each script writes its own page into the shared build/ directory and
+      # its own CSVs into its dataset directory's output/. NLCD lookups come
+      # from the committed common/nlcd_lookup.json cache; a site whose
+      # coordinate is not yet cached requires the MRLC service to be
+      # reachable, and either script raises rather than completing with
+      # missing land-use if it is not.
+      - name: Build arthropod dashboard
         run: python arthropod_timeline/build_timeline.py
 
-      - name: List build outputs
+      - name: Build bird dashboard
+        run: python bird_timeline/build_birds.py
+
+      - name: Verify build outputs
         run: |
-          ls -la arthropod_timeline/build
-          test -f arthropod_timeline/build/index.html
+          ls -la build
+          test -f build/index.html
+          test -f build/birds.html
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
@@ -45,7 +57,7 @@ jobs:
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: arthropod_timeline/build
+          path: build
 
   deploy:
     runs-on: ubuntu-latest

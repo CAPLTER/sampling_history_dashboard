@@ -1,0 +1,3 @@
+pandas>=2.0.0
+plotly>=5.24.0
+pygeohydro>=0.14.0

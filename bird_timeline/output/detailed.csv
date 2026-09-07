@@ -1,0 +1,474 @@
+site_code,status,lat,long,segment_start,segment_end,land_use_class,nlcd_code,nlcd_snapshot_year
+AA-17,Retired early,33.45215242,-111.80062691,2000-08-29,2001-01-01,"Developed, low intensity",22,2001
+AA-17,Retired early,33.45215242,-111.80062691,2001-01-01,2006-01-01,"Developed, low intensity",22,2001
+AA-17,Retired early,33.45215242,-111.80062691,2006-01-01,2011-01-01,"Developed, low intensity",22,2006
+AA-17,Retired early,33.45215242,-111.80062691,2011-01-01,2016-01-01,"Developed, low intensity",22,2011
+AA-17,Retired early,33.45215242,-111.80062691,2016-01-01,2016-05-03,"Developed, low intensity",22,2016
+AA-20,Retired early,33.31575447,-111.82392055,2000-08-18,2001-01-01,"Developed, low intensity",22,2001
+AA-20,Retired early,33.31575447,-111.82392055,2001-01-01,2006-01-01,"Developed, low intensity",22,2001
+AA-20,Retired early,33.31575447,-111.82392055,2006-01-01,2011-01-01,"Developed, low intensity",22,2006
+AA-20,Retired early,33.31575447,-111.82392055,2011-01-01,2016-01-01,"Developed, low intensity",22,2011
+AA-20,Retired early,33.31575447,-111.82392055,2016-01-01,2016-05-12,"Developed, low intensity",22,2016
+AB-19,Sampled to study end,33.35162,-111.77364,2000-08-18,2001-01-01,"Developed, low intensity",22,2001
+AB-19,Sampled to study end,33.35162,-111.77364,2001-01-01,2006-01-01,"Developed, low intensity",22,2001
+AB-19,Sampled to study end,33.35162,-111.77364,2006-01-01,2011-01-01,"Developed, low intensity",22,2006
+AB-19,Sampled to study end,33.35162,-111.77364,2011-01-01,2016-01-01,"Developed, low intensity",22,2011
+AB-19,Sampled to study end,33.35162,-111.77364,2016-01-01,2019-01-01,"Developed, low intensity",22,2016
+AB-19,Sampled to study end,33.35162,-111.77364,2019-01-01,2021-01-01,"Developed, low intensity",22,2019
+AB-19,Sampled to study end,33.35162,-111.77364,2021-01-01,2025-05-02,"Developed, low intensity",22,2021
+AC-16,Retired early,33.47893705,-111.71943351,2000-08-29,2001-01-01,"Developed, low intensity",22,2001
+AC-16,Retired early,33.47893705,-111.71943351,2001-01-01,2006-01-01,"Developed, low intensity",22,2001
+AC-16,Retired early,33.47893705,-111.71943351,2006-01-01,2011-01-01,"Developed, low intensity",22,2006
+AC-16,Retired early,33.47893705,-111.71943351,2011-01-01,2016-01-01,"Developed, low intensity",22,2011
+AC-16,Retired early,33.47893705,-111.71943351,2016-01-01,2016-05-03,"Developed, low intensity",22,2016
+AD-10,Sampled to study end,33.67689447,-111.71140004,2000-08-03,2001-01-01,Shrub/scrub,52,2001
+AD-10,Sampled to study end,33.67689447,-111.71140004,2001-01-01,2006-01-01,Shrub/scrub,52,2001
+AD-10,Sampled to study end,33.67689447,-111.71140004,2006-01-01,2011-01-01,Shrub/scrub,52,2006
+AD-10,Sampled to study end,33.67689447,-111.71140004,2011-01-01,2016-01-01,Shrub/scrub,52,2011
+AD-10,Sampled to study end,33.67689447,-111.71140004,2016-01-01,2019-01-01,Shrub/scrub,52,2016
+AD-10,Sampled to study end,33.67689447,-111.71140004,2019-01-01,2021-01-01,Shrub/scrub,52,2019
+AD-10,Sampled to study end,33.67689447,-111.71140004,2021-01-01,2025-04-25,Shrub/scrub,52,2021
+AD-21,Retired early,33.30702446,-111.70294153,2000-08-18,2001-01-01,"Developed, low intensity",22,2001
+AD-21,Retired early,33.30702446,-111.70294153,2001-01-01,2006-01-01,"Developed, low intensity",22,2001
+AD-21,Retired early,33.30702446,-111.70294153,2006-01-01,2011-01-01,"Developed, low intensity",22,2006
+AD-21,Retired early,33.30702446,-111.70294153,2011-01-01,2016-01-01,"Developed, low intensity",22,2011
+AD-21,Retired early,33.30702446,-111.70294153,2016-01-01,2016-05-05,"Developed, low intensity",22,2016
+AE-23,Sampled to study end,33.21869957,-111.62649983,2000-08-25,2001-01-01,"Developed, open space",21,2001
+AE-23,Sampled to study end,33.21869957,-111.62649983,2001-01-01,2006-01-01,"Developed, open space",21,2001
+AE-23,Sampled to study end,33.21869957,-111.62649983,2006-01-01,2011-01-01,"Developed, open space",21,2006
+AE-23,Sampled to study end,33.21869957,-111.62649983,2011-01-01,2016-01-01,"Developed, open space",21,2011
+AE-23,Sampled to study end,33.21869957,-111.62649983,2016-01-01,2019-01-01,"Developed, open space",21,2016
+AE-23,Sampled to study end,33.21869957,-111.62649983,2019-01-01,2021-01-01,"Developed, open space",21,2019
+AE-23,Sampled to study end,33.21869957,-111.62649983,2021-01-01,2025-04-30,"Developed, open space",21,2021
+AF-12,Sampled to study end,33.6102352,-111.62201023,2000-08-03,2001-01-01,Shrub/scrub,52,2001
+AF-12,Sampled to study end,33.6102352,-111.62201023,2001-01-01,2006-01-01,Shrub/scrub,52,2001
+AF-12,Sampled to study end,33.6102352,-111.62201023,2006-01-01,2011-01-01,Shrub/scrub,52,2006
+AF-12,Sampled to study end,33.6102352,-111.62201023,2011-01-01,2016-01-01,Shrub/scrub,52,2011
+AF-12,Sampled to study end,33.6102352,-111.62201023,2016-01-01,2019-01-01,Shrub/scrub,52,2016
+AF-12,Sampled to study end,33.6102352,-111.62201023,2019-01-01,2021-01-01,Shrub/scrub,52,2019
+AF-12,Sampled to study end,33.6102352,-111.62201023,2021-01-01,2025-04-25,Shrub/scrub,52,2021
+F-8,Sampled to study end,33.75598493,-112.74192461,2000-11-16,2001-01-01,Shrub/scrub,52,2001
+F-8,Sampled to study end,33.75598493,-112.74192461,2001-01-01,2006-01-01,Shrub/scrub,52,2001
+F-8,Sampled to study end,33.75598493,-112.74192461,2006-01-01,2011-01-01,Shrub/scrub,52,2006
+F-8,Sampled to study end,33.75598493,-112.74192461,2011-01-01,2016-01-01,Shrub/scrub,52,2011
+F-8,Sampled to study end,33.75598493,-112.74192461,2016-01-01,2019-01-01,Shrub/scrub,52,2016
+F-8,Sampled to study end,33.75598493,-112.74192461,2019-01-01,2021-01-01,Shrub/scrub,52,2019
+F-8,Sampled to study end,33.75598493,-112.74192461,2021-01-01,2025-04-02,Shrub/scrub,52,2021
+G-15,Sampled to study end,33.49892344,-112.67365342,2000-11-16,2001-01-01,Shrub/scrub,52,2001
+G-15,Sampled to study end,33.49892344,-112.67365342,2001-01-01,2006-01-01,Shrub/scrub,52,2001
+G-15,Sampled to study end,33.49892344,-112.67365342,2006-01-01,2011-01-01,Shrub/scrub,52,2006
+G-15,Sampled to study end,33.49892344,-112.67365342,2011-01-01,2016-01-01,Shrub/scrub,52,2011
+G-15,Sampled to study end,33.49892344,-112.67365342,2016-01-01,2019-01-01,Shrub/scrub,52,2016
+G-15,Sampled to study end,33.49892344,-112.67365342,2019-01-01,2021-01-01,Shrub/scrub,52,2019
+G-15,Sampled to study end,33.49892344,-112.67365342,2021-01-01,2025-03-31,Shrub/scrub,52,2021
+I-11,Sampled to study end,33.65442124,-112.61775501,2000-10-25,2001-01-01,Shrub/scrub,52,2001
+I-11,Sampled to study end,33.65442124,-112.61775501,2001-01-01,2006-01-01,Shrub/scrub,52,2001
+I-11,Sampled to study end,33.65442124,-112.61775501,2006-01-01,2011-01-01,Shrub/scrub,52,2006
+I-11,Sampled to study end,33.65442124,-112.61775501,2011-01-01,2016-01-01,Shrub/scrub,52,2011
+I-11,Sampled to study end,33.65442124,-112.61775501,2016-01-01,2019-01-01,Shrub/scrub,52,2016
+I-11,Sampled to study end,33.65442124,-112.61775501,2019-01-01,2021-01-01,Shrub/scrub,52,2019
+I-11,Sampled to study end,33.65442124,-112.61775501,2021-01-01,2025-03-31,Barren land,31,2021
+I-17,Sampled to study end,33.44059202,-112.57693338,2000-11-08,2001-01-01,Shrub/scrub,52,2001
+I-17,Sampled to study end,33.44059202,-112.57693338,2001-01-01,2006-01-01,Shrub/scrub,52,2001
+I-17,Sampled to study end,33.44059202,-112.57693338,2006-01-01,2011-01-01,Shrub/scrub,52,2006
+I-17,Sampled to study end,33.44059202,-112.57693338,2011-01-01,2016-01-01,Shrub/scrub,52,2011
+I-17,Sampled to study end,33.44059202,-112.57693338,2016-01-01,2019-01-01,Shrub/scrub,52,2016
+I-17,Sampled to study end,33.44059202,-112.57693338,2019-01-01,2021-01-01,Shrub/scrub,52,2019
+I-17,Sampled to study end,33.44059202,-112.57693338,2021-01-01,2025-03-31,Shrub/scrub,52,2021
+L-7,Retired early,33.78130347,-112.45220396,2000-10-24,2001-01-01,Shrub/scrub,52,2001
+L-7,Retired early,33.78130347,-112.45220396,2001-01-01,2006-01-01,Shrub/scrub,52,2001
+L-7,Retired early,33.78130347,-112.45220396,2006-01-01,2011-01-01,Shrub/scrub,52,2006
+L-7,Retired early,33.78130347,-112.45220396,2011-01-01,2016-01-01,Shrub/scrub,52,2011
+L-7,Retired early,33.78130347,-112.45220396,2016-01-01,2016-05-02,Shrub/scrub,52,2016
+M-16,Retired early,33.4826731750001,-112.444002161,2000-11-08,2001-01-01,"Developed, low intensity",22,2001
+M-16,Retired early,33.4826731750001,-112.444002161,2001-01-01,2006-01-01,"Developed, low intensity",22,2001
+M-16,Retired early,33.4826731750001,-112.444002161,2006-01-01,2011-01-01,"Developed, low intensity",22,2006
+M-16,Retired early,33.4826731750001,-112.444002161,2011-01-01,2016-01-01,"Developed, low intensity",22,2011
+M-16,Retired early,33.4826731750001,-112.444002161,2016-01-01,2016-04-30,"Developed, low intensity",22,2016
+M-9,Retired early,33.7231006287547,-112.440622368419,2000-10-24,2001-01-01,Shrub/scrub,52,2001
+M-9,Retired early,33.7231006287547,-112.440622368419,2001-01-01,2001-07-23,Shrub/scrub,52,2001
+N-12,Sampled to study end,33.62205905,-112.37598673,2000-10-25,2001-01-01,Cultivated crops,82,2001
+N-12,Sampled to study end,33.62205905,-112.37598673,2001-01-01,2006-01-01,Cultivated crops,82,2001
+N-12,Sampled to study end,33.62205905,-112.37598673,2006-01-01,2011-01-01,Shrub/scrub,52,2006
+N-12,Sampled to study end,33.62205905,-112.37598673,2011-01-01,2016-01-01,"Developed, medium intensity",23,2011
+N-12,Sampled to study end,33.62205905,-112.37598673,2016-01-01,2019-01-01,"Developed, medium intensity",23,2016
+N-12,Sampled to study end,33.62205905,-112.37598673,2019-01-01,2021-01-01,"Developed, medium intensity",23,2019
+N-12,Sampled to study end,33.62205905,-112.37598673,2021-01-01,2025-04-02,"Developed, medium intensity",23,2021
+O-9,Sampled to study end,33.70631712,-112.35713683,2000-10-24,2001-01-01,Shrub/scrub,52,2001
+O-9,Sampled to study end,33.70631712,-112.35713683,2001-01-01,2006-01-01,Shrub/scrub,52,2001
+O-9,Sampled to study end,33.70631712,-112.35713683,2006-01-01,2011-01-01,Shrub/scrub,52,2006
+O-9,Sampled to study end,33.70631712,-112.35713683,2011-01-01,2016-01-01,Shrub/scrub,52,2011
+O-9,Sampled to study end,33.70631712,-112.35713683,2016-01-01,2019-01-01,Shrub/scrub,52,2016
+O-9,Sampled to study end,33.70631712,-112.35713683,2019-01-01,2021-01-01,Shrub/scrub,52,2019
+O-9,Sampled to study end,33.70631712,-112.35713683,2021-01-01,2025-04-02,Shrub/scrub,52,2021
+P-16,Sampled to study end,33.48209987,-112.30388325,2000-10-17,2001-01-01,"Developed, low intensity",22,2001
+P-16,Sampled to study end,33.48209987,-112.30388325,2001-01-01,2006-01-01,"Developed, low intensity",22,2001
+P-16,Sampled to study end,33.48209987,-112.30388325,2006-01-01,2011-01-01,"Developed, low intensity",22,2006
+P-16,Sampled to study end,33.48209987,-112.30388325,2011-01-01,2016-01-01,"Developed, low intensity",22,2011
+P-16,Sampled to study end,33.48209987,-112.30388325,2016-01-01,2019-01-01,"Developed, low intensity",22,2016
+P-16,Sampled to study end,33.48209987,-112.30388325,2019-01-01,2021-01-01,"Developed, low intensity",22,2019
+P-16,Sampled to study end,33.48209987,-112.30388325,2021-01-01,2025-04-07,"Developed, low intensity",22,2021
+P-18,Retired early,33.4117783,-112.29121618,2000-10-17,2001-01-01,Cultivated crops,82,2001
+P-18,Retired early,33.4117783,-112.29121618,2001-01-01,2006-01-01,Cultivated crops,82,2001
+P-18,Retired early,33.4117783,-112.29121618,2006-01-01,2011-01-01,Cultivated crops,82,2006
+P-18,Retired early,33.4117783,-112.29121618,2011-01-01,2016-01-01,Cultivated crops,82,2011
+P-18,Retired early,33.4117783,-112.29121618,2016-01-01,2016-05-05,Cultivated crops,82,2016
+Q-7,Retired early,33.78404344,-112.25000446,2000-10-26,2001-01-01,Shrub/scrub,52,2001
+Q-7,Retired early,33.78404344,-112.25000446,2001-01-01,2006-01-01,Shrub/scrub,52,2001
+Q-7,Retired early,33.78404344,-112.25000446,2006-01-01,2011-01-01,Shrub/scrub,52,2006
+Q-7,Retired early,33.78404344,-112.25000446,2011-01-01,2016-01-01,Shrub/scrub,52,2011
+Q-7,Retired early,33.78404344,-112.25000446,2016-01-01,2016-05-02,Shrub/scrub,52,2016
+R-12,Retired early,33.60711789,-112.1936152,2000-10-05,2001-01-01,"Developed, open space",21,2001
+R-12,Retired early,33.60711789,-112.1936152,2001-01-01,2006-01-01,"Developed, open space",21,2001
+R-12,Retired early,33.60711789,-112.1936152,2006-01-01,2011-01-01,"Developed, open space",21,2006
+R-12,Retired early,33.60711789,-112.1936152,2011-01-01,2016-01-01,"Developed, open space",21,2011
+R-12,Retired early,33.60711789,-112.1936152,2016-01-01,2016-04-21,"Developed, open space",21,2016
+S-16,Retired early,33.4667159,-112.14184589,2000-10-12,2001-01-01,"Developed, medium intensity",23,2001
+S-16,Retired early,33.4667159,-112.14184589,2001-01-01,2006-01-01,"Developed, medium intensity",23,2001
+S-16,Retired early,33.4667159,-112.14184589,2006-01-01,2011-01-01,"Developed, medium intensity",23,2006
+S-16,Retired early,33.4667159,-112.14184589,2011-01-01,2016-01-01,"Developed, medium intensity",23,2011
+S-16,Retired early,33.4667159,-112.14184589,2016-01-01,2016-05-05,"Developed, medium intensity",23,2016
+T-11,Sampled to study end,33.64816,-112.13335,2000-08-23,2001-01-01,"Developed, medium intensity",23,2001
+T-11,Sampled to study end,33.64816,-112.13335,2001-01-01,2006-01-01,"Developed, medium intensity",23,2001
+T-11,Sampled to study end,33.64816,-112.13335,2006-01-01,2011-01-01,"Developed, medium intensity",23,2006
+T-11,Sampled to study end,33.64816,-112.13335,2011-01-01,2016-01-01,"Developed, medium intensity",23,2011
+T-11,Sampled to study end,33.64816,-112.13335,2016-01-01,2019-01-01,"Developed, medium intensity",23,2016
+T-11,Sampled to study end,33.64816,-112.13335,2019-01-01,2021-01-01,"Developed, medium intensity",23,2019
+T-11,Sampled to study end,33.64816,-112.13335,2021-01-01,2025-04-03,"Developed, medium intensity",23,2021
+T-13,Sampled to study end,33.57299,-112.13908,2000-08-23,2001-01-01,"Developed, medium intensity",23,2001
+T-13,Sampled to study end,33.57299,-112.13908,2001-01-01,2006-01-01,"Developed, medium intensity",23,2001
+T-13,Sampled to study end,33.57299,-112.13908,2006-01-01,2011-01-01,"Developed, medium intensity",23,2006
+T-13,Sampled to study end,33.57299,-112.13908,2011-01-01,2016-01-01,"Developed, medium intensity",23,2011
+T-13,Sampled to study end,33.57299,-112.13908,2016-01-01,2019-01-01,"Developed, medium intensity",23,2016
+T-13,Sampled to study end,33.57299,-112.13908,2019-01-01,2021-01-01,"Developed, medium intensity",23,2019
+T-13,Sampled to study end,33.57299,-112.13908,2021-01-01,2025-04-02,"Developed, medium intensity",23,2021
+T-19,Sampled to study end,33.37853123,-112.12080379,2000-10-17,2001-01-01,Shrub/scrub,52,2001
+T-19,Sampled to study end,33.37853123,-112.12080379,2001-01-01,2006-01-01,Shrub/scrub,52,2001
+T-19,Sampled to study end,33.37853123,-112.12080379,2006-01-01,2011-01-01,Shrub/scrub,52,2006
+T-19,Sampled to study end,33.37853123,-112.12080379,2011-01-01,2016-01-01,Shrub/scrub,52,2011
+T-19,Sampled to study end,33.37853123,-112.12080379,2016-01-01,2019-01-01,Shrub/scrub,52,2016
+T-19,Sampled to study end,33.37853123,-112.12080379,2019-01-01,2021-01-01,Shrub/scrub,52,2019
+T-19,Sampled to study end,33.37853123,-112.12080379,2021-01-01,2025-04-15,Shrub/scrub,52,2021
+U-12,Sampled to study end,33.62722,-112.07862,2000-08-23,2001-01-01,"Developed, low intensity",22,2001
+U-12,Sampled to study end,33.62722,-112.07862,2001-01-01,2006-01-01,"Developed, low intensity",22,2001
+U-12,Sampled to study end,33.62722,-112.07862,2006-01-01,2011-01-01,"Developed, low intensity",22,2006
+U-12,Sampled to study end,33.62722,-112.07862,2011-01-01,2016-01-01,"Developed, low intensity",22,2011
+U-12,Sampled to study end,33.62722,-112.07862,2016-01-01,2019-01-01,"Developed, low intensity",22,2016
+U-12,Sampled to study end,33.62722,-112.07862,2019-01-01,2021-01-01,"Developed, low intensity",22,2019
+U-12,Sampled to study end,33.62722,-112.07862,2021-01-01,2025-04-03,"Developed, low intensity",22,2021
+U-13,Sampled to study end,33.59796,-112.08335,2000-06-06,2001-01-01,Shrub/scrub,52,2001
+U-13,Sampled to study end,33.59796,-112.08335,2001-01-01,2006-01-01,Shrub/scrub,52,2001
+U-13,Sampled to study end,33.59796,-112.08335,2006-01-01,2011-01-01,Shrub/scrub,52,2006
+U-13,Sampled to study end,33.59796,-112.08335,2011-01-01,2016-01-01,Shrub/scrub,52,2011
+U-13,Sampled to study end,33.59796,-112.08335,2016-01-01,2019-01-01,Shrub/scrub,52,2016
+U-13,Sampled to study end,33.59796,-112.08335,2019-01-01,2021-01-01,Shrub/scrub,52,2019
+U-13,Sampled to study end,33.59796,-112.08335,2021-01-01,2025-04-03,Shrub/scrub,52,2021
+U-8,Sampled to study end,33.7711,-112.0919,2000-10-26,2001-01-01,Shrub/scrub,52,2001
+U-8,Sampled to study end,33.7711,-112.0919,2001-01-01,2006-01-01,Shrub/scrub,52,2001
+U-8,Sampled to study end,33.7711,-112.0919,2006-01-01,2011-01-01,Shrub/scrub,52,2006
+U-8,Sampled to study end,33.7711,-112.0919,2011-01-01,2016-01-01,Shrub/scrub,52,2011
+U-8,Sampled to study end,33.7711,-112.0919,2016-01-01,2019-01-01,Shrub/scrub,52,2016
+U-8,Sampled to study end,33.7711,-112.0919,2019-01-01,2021-01-01,Shrub/scrub,52,2019
+U-8,Sampled to study end,33.7711,-112.0919,2021-01-01,2025-04-03,Shrub/scrub,52,2021
+V-13,Retired early,33.58346223,-112.02280878,2000-08-21,2001-01-01,"Developed, high intensity",24,2001
+V-13,Retired early,33.58346223,-112.02280878,2001-01-01,2006-01-01,"Developed, high intensity",24,2001
+V-13,Retired early,33.58346223,-112.02280878,2006-01-01,2011-01-01,"Developed, high intensity",24,2006
+V-13,Retired early,33.58346223,-112.02280878,2011-01-01,2016-01-01,"Developed, high intensity",24,2011
+V-13,Retired early,33.58346223,-112.02280878,2016-01-01,2016-04-19,"Developed, high intensity",24,2016
+V-14,Sampled to study end,33.55222,-112.05477,2000-08-21,2001-01-01,"Developed, medium intensity",23,2001
+V-14,Sampled to study end,33.55222,-112.05477,2001-01-01,2006-01-01,"Developed, medium intensity",23,2001
+V-14,Sampled to study end,33.55222,-112.05477,2006-01-01,2011-01-01,"Developed, medium intensity",23,2006
+V-14,Sampled to study end,33.55222,-112.05477,2011-01-01,2016-01-01,"Developed, medium intensity",23,2011
+V-14,Sampled to study end,33.55222,-112.05477,2016-01-01,2019-01-01,"Developed, medium intensity",23,2016
+V-14,Sampled to study end,33.55222,-112.05477,2019-01-01,2021-01-01,"Developed, medium intensity",23,2019
+V-14,Sampled to study end,33.55222,-112.05477,2021-01-01,2025-04-04,"Developed, medium intensity",23,2021
+V-16,Retired early,33.4711342620001,-112.046812844,2000-10-12,2001-01-01,"Developed, medium intensity",23,2001
+V-16,Retired early,33.4711342620001,-112.046812844,2001-01-01,2006-01-01,"Developed, medium intensity",23,2001
+V-16,Retired early,33.4711342620001,-112.046812844,2006-01-01,2011-01-01,"Developed, medium intensity",23,2006
+V-16,Retired early,33.4711342620001,-112.046812844,2011-01-01,2016-01-01,"Developed, medium intensity",23,2011
+V-16,Retired early,33.4711342620001,-112.046812844,2016-01-01,2016-05-02,"Developed, medium intensity",23,2016
+V-18,Retired early,33.38786046,-112.02883017,2000-10-17,2001-01-01,"Developed, open space",21,2001
+V-18,Retired early,33.38786046,-112.02883017,2001-01-01,2006-01-01,"Developed, open space",21,2001
+V-18,Retired early,33.38786046,-112.02883017,2006-01-01,2011-01-01,"Developed, open space",21,2006
+V-18,Retired early,33.38786046,-112.02883017,2011-01-01,2014-03-28,"Developed, open space",21,2011
+V-20,Sampled to study end,33.32819623,-112.03228427,2000-10-26,2001-01-01,Shrub/scrub,52,2001
+V-20,Sampled to study end,33.32819623,-112.03228427,2001-01-01,2006-01-01,Shrub/scrub,52,2001
+V-20,Sampled to study end,33.32819623,-112.03228427,2006-01-01,2011-01-01,Shrub/scrub,52,2006
+V-20,Sampled to study end,33.32819623,-112.03228427,2011-01-01,2016-01-01,Shrub/scrub,52,2011
+V-20,Sampled to study end,33.32819623,-112.03228427,2016-01-01,2019-01-01,Shrub/scrub,52,2016
+V-20,Sampled to study end,33.32819623,-112.03228427,2019-01-01,2021-01-01,Shrub/scrub,52,2019
+V-20,Sampled to study end,33.32819623,-112.03228427,2021-01-01,2025-04-29,Shrub/scrub,52,2021
+W-15,Sampled to study end,33.52388542,-111.99231927,2000-08-21,2001-01-01,"Developed, low intensity",22,2001
+W-15,Sampled to study end,33.52388542,-111.99231927,2001-01-01,2006-01-01,"Developed, low intensity",22,2001
+W-15,Sampled to study end,33.52388542,-111.99231927,2006-01-01,2011-01-01,"Developed, low intensity",22,2006
+W-15,Sampled to study end,33.52388542,-111.99231927,2011-01-01,2016-01-01,"Developed, low intensity",22,2011
+W-15,Sampled to study end,33.52388542,-111.99231927,2016-01-01,2019-01-01,"Developed, low intensity",22,2016
+W-15,Sampled to study end,33.52388542,-111.99231927,2019-01-01,2021-01-01,"Developed, low intensity",22,2019
+W-15,Sampled to study end,33.52388542,-111.99231927,2021-01-01,2025-04-24,"Developed, low intensity",22,2021
+W-17,Retired early,33.44471,-111.999657,2000-08-09,2001-01-01,"Developed, medium intensity",23,2001
+W-17,Retired early,33.44471,-111.999657,2001-01-01,2006-01-01,"Developed, medium intensity",23,2001
+W-17,Retired early,33.44471,-111.999657,2006-01-01,2011-01-01,"Developed, medium intensity",23,2006
+W-17,Retired early,33.44471,-111.999657,2011-01-01,2016-01-01,"Developed, medium intensity",23,2011
+W-17,Retired early,33.44471,-111.999657,2016-01-01,2016-05-11,"Developed, medium intensity",23,2016
+W-6,Retired early,33.82083085,-112.01090472,2000-08-04,2001-01-01,Shrub/scrub,52,2001
+W-6,Retired early,33.82083085,-112.01090472,2001-01-01,2006-01-01,Shrub/scrub,52,2001
+W-6,Retired early,33.82083085,-112.01090472,2006-01-01,2011-01-01,Shrub/scrub,52,2006
+W-6,Retired early,33.82083085,-112.01090472,2011-01-01,2016-01-01,Shrub/scrub,52,2011
+W-6,Retired early,33.82083085,-112.01090472,2016-01-01,2016-05-04,Shrub/scrub,52,2016
+X-18,Retired early,33.41962662,-111.92893323,2000-10-12,2001-01-01,"Developed, medium intensity",23,2001
+X-18,Retired early,33.41962662,-111.92893323,2001-01-01,2006-01-01,"Developed, medium intensity",23,2001
+X-18,Retired early,33.41962662,-111.92893323,2006-01-01,2011-01-01,"Developed, medium intensity",23,2006
+X-18,Retired early,33.41962662,-111.92893323,2011-01-01,2016-01-01,"Developed, medium intensity",23,2011
+X-18,Retired early,33.41962662,-111.92893323,2016-01-01,2016-04-19,"Developed, medium intensity",23,2016
+X-8,Sampled to study end,33.7766713,-111.95039023,2000-08-04,2001-01-01,Shrub/scrub,52,2001
+X-8,Sampled to study end,33.7766713,-111.95039023,2001-01-01,2006-01-01,Shrub/scrub,52,2001
+X-8,Sampled to study end,33.7766713,-111.95039023,2006-01-01,2011-01-01,Shrub/scrub,52,2006
+X-8,Sampled to study end,33.7766713,-111.95039023,2011-01-01,2016-01-01,Shrub/scrub,52,2011
+X-8,Sampled to study end,33.7766713,-111.95039023,2016-01-01,2019-01-01,"Developed, medium intensity",23,2016
+X-8,Sampled to study end,33.7766713,-111.95039023,2019-01-01,2021-01-01,"Developed, medium intensity",23,2019
+X-8,Sampled to study end,33.7766713,-111.95039023,2021-01-01,2025-04-23,"Developed, medium intensity",23,2021
+Y-19,Sampled to study end,33.37724,-111.91532,2000-08-18,2001-01-01,"Developed, medium intensity",23,2001
+Y-19,Sampled to study end,33.37724,-111.91532,2001-01-01,2006-01-01,"Developed, medium intensity",23,2001
+Y-19,Sampled to study end,33.37724,-111.91532,2006-01-01,2011-01-01,"Developed, medium intensity",23,2006
+Y-19,Sampled to study end,33.37724,-111.91532,2011-01-01,2016-01-01,"Developed, medium intensity",23,2011
+Y-19,Sampled to study end,33.37724,-111.91532,2016-01-01,2019-01-01,"Developed, medium intensity",23,2016
+Y-19,Sampled to study end,33.37724,-111.91532,2019-01-01,2021-01-01,"Developed, medium intensity",23,2019
+Y-19,Sampled to study end,33.37724,-111.91532,2021-01-01,2025-05-02,"Developed, medium intensity",23,2021
+Z-23,Sampled to study end,33.21929,-111.87161,2000-08-25,2001-01-01,"Developed, medium intensity",23,2001
+Z-23,Sampled to study end,33.21929,-111.87161,2001-01-01,2006-01-01,"Developed, medium intensity",23,2001
+Z-23,Sampled to study end,33.21929,-111.87161,2006-01-01,2011-01-01,"Developed, medium intensity",23,2006
+Z-23,Sampled to study end,33.21929,-111.87161,2011-01-01,2016-01-01,"Developed, medium intensity",23,2011
+Z-23,Sampled to study end,33.21929,-111.87161,2016-01-01,2019-01-01,"Developed, medium intensity",23,2016
+Z-23,Sampled to study end,33.21929,-111.87161,2019-01-01,2021-01-01,"Developed, medium intensity",23,2019
+Z-23,Sampled to study end,33.21929,-111.87161,2021-01-01,2025-05-02,"Developed, medium intensity",23,2021
+NDV-C,Retired early,33.31217213,-111.67760412,2004-01-07,2006-01-01,"Developed, open space",21,2001
+NDV-C,Retired early,33.31217213,-111.67760412,2006-01-01,2011-01-01,"Developed, open space",21,2006
+NDV-C,Retired early,33.31217213,-111.67760412,2011-01-01,2016-01-01,"Developed, open space",21,2011
+NDV-C,Retired early,33.31217213,-111.67760412,2016-01-01,2016-05-05,"Developed, open space",21,2016
+NDV-M,Retired early,33.3107187,-111.68083778,2003-10-12,2006-01-01,"Developed, low intensity",22,2001
+NDV-M,Retired early,33.3107187,-111.68083778,2006-01-01,2011-01-01,"Developed, low intensity",22,2006
+NDV-M,Retired early,33.3107187,-111.68083778,2011-01-01,2016-01-01,"Developed, low intensity",22,2011
+NDV-M,Retired early,33.3107187,-111.68083778,2016-01-01,2016-05-05,"Developed, low intensity",22,2016
+NDV-N,Retired early,33.31423902,-111.6808283,2003-10-12,2006-01-01,"Developed, open space",21,2001
+NDV-N,Retired early,33.31423902,-111.6808283,2006-01-01,2011-01-01,"Developed, open space",21,2006
+NDV-N,Retired early,33.31423902,-111.6808283,2011-01-01,2016-01-01,"Developed, open space",21,2011
+NDV-N,Retired early,33.31423902,-111.6808283,2016-01-01,2016-05-05,"Developed, open space",21,2016
+NDV-O,Retired early,33.31160861,-111.67849193,2003-10-12,2006-01-01,"Developed, open space",21,2001
+NDV-O,Retired early,33.31160861,-111.67849193,2006-01-01,2011-01-01,"Developed, open space",21,2006
+NDV-O,Retired early,33.31160861,-111.67849193,2011-01-01,2016-01-01,"Developed, open space",21,2011
+NDV-O,Retired early,33.31160861,-111.67849193,2016-01-01,2016-05-05,"Developed, open space",21,2016
+NDV-X,Retired early,33.31232878,-111.6809102,2003-10-12,2006-01-01,"Developed, open space",21,2001
+NDV-X,Retired early,33.31232878,-111.6809102,2006-01-01,2011-01-01,"Developed, open space",21,2006
+NDV-X,Retired early,33.31232878,-111.6809102,2011-01-01,2016-01-01,"Developed, open space",21,2011
+NDV-X,Retired early,33.31232878,-111.6809102,2016-01-01,2016-05-05,"Developed, open space",21,2016
+7-11A,Sampled to study end,33.43214,-112.08593,2016-12-29,2019-01-01,"Developed, medium intensity",23,2016
+7-11A,Sampled to study end,33.43214,-112.08593,2019-01-01,2021-01-01,"Developed, medium intensity",23,2019
+7-11A,Sampled to study end,33.43214,-112.08593,2021-01-01,2025-04-02,"Developed, medium intensity",23,2021
+7-11B,Sampled to study end,33.43461,-112.08698,2016-12-29,2019-01-01,"Developed, high intensity",24,2016
+7-11B,Sampled to study end,33.43461,-112.08698,2019-01-01,2021-01-01,"Developed, high intensity",24,2019
+7-11B,Sampled to study end,33.43461,-112.08698,2021-01-01,2025-04-02,"Developed, high intensity",24,2021
+7-11C,Sampled to study end,33.4358,-112.0923,2016-12-29,2019-01-01,"Developed, low intensity",22,2016
+7-11C,Sampled to study end,33.4358,-112.0923,2019-01-01,2021-01-01,"Developed, low intensity",22,2019
+7-11C,Sampled to study end,33.4358,-112.0923,2021-01-01,2025-04-02,"Developed, medium intensity",23,2021
+AA-9,Sampled to study end,33.7227922235445,-111.831559366856,2016-12-20,2019-01-01,"Developed, low intensity",22,2016
+AA-9,Sampled to study end,33.7227922235445,-111.831559366856,2019-01-01,2021-01-01,"Developed, low intensity",22,2019
+AA-9,Sampled to study end,33.7227922235445,-111.831559366856,2021-01-01,2025-04-23,"Developed, low intensity",22,2021
+AA-9B,Sampled to study end,33.65827,-111.88552,2016-12-20,2019-01-01,"Developed, low intensity",22,2016
+AA-9B,Sampled to study end,33.65827,-111.88552,2019-01-01,2021-01-01,"Developed, low intensity",22,2019
+AA-9B,Sampled to study end,33.65827,-111.88552,2021-01-01,2025-04-23,"Developed, low intensity",22,2021
+AA-9C,Sampled to study end,33.66616,-111.88956,2016-12-20,2019-01-01,"Developed, open space",21,2016
+AA-9C,Sampled to study end,33.66616,-111.88956,2019-01-01,2021-01-01,"Developed, open space",21,2019
+AA-9C,Sampled to study end,33.66616,-111.88956,2021-01-01,2025-04-23,"Developed, open space",21,2021
+IBWA,Sampled to study end,33.47343,-111.91157,2016-12-28,2019-01-01,"Developed, medium intensity",23,2016
+IBWA,Sampled to study end,33.47343,-111.91157,2019-01-01,2021-01-01,"Developed, medium intensity",23,2019
+IBWA,Sampled to study end,33.47343,-111.91157,2021-01-01,2025-04-25,"Developed, medium intensity",23,2021
+IBWB,Sampled to study end,33.47124,-111.91148,2016-12-28,2019-01-01,"Developed, medium intensity",23,2016
+IBWB,Sampled to study end,33.47124,-111.91148,2019-01-01,2021-01-01,"Developed, medium intensity",23,2019
+IBWB,Sampled to study end,33.47124,-111.91148,2021-01-01,2025-04-25,"Developed, medium intensity",23,2021
+IBWC,Sampled to study end,33.4696,-111.91415,2016-12-28,2019-01-01,"Developed, low intensity",22,2016
+IBWC,Sampled to study end,33.4696,-111.91415,2019-01-01,2021-01-01,"Developed, low intensity",22,2019
+IBWC,Sampled to study end,33.4696,-111.91415,2021-01-01,2025-04-25,"Developed, low intensity",22,2021
+PWRA,Sampled to study end,33.20731,-111.70968,2017-01-24,2019-01-01,"Developed, open space",21,2016
+PWRA,Sampled to study end,33.20731,-111.70968,2019-01-01,2021-01-01,"Developed, open space",21,2019
+PWRA,Sampled to study end,33.20731,-111.70968,2021-01-01,2025-04-30,"Developed, open space",21,2021
+PWRB,Sampled to study end,33.24183,-111.71894,2017-01-24,2019-01-01,"Developed, high intensity",24,2016
+PWRB,Sampled to study end,33.24183,-111.71894,2019-01-01,2021-01-01,"Developed, high intensity",24,2019
+PWRB,Sampled to study end,33.24183,-111.71894,2021-01-01,2025-04-30,"Developed, high intensity",24,2021
+PWRC,Sampled to study end,33.25643,-111.75764,2017-01-24,2019-01-01,"Developed, open space",21,2016
+PWRC,Sampled to study end,33.25643,-111.75764,2019-01-01,2021-01-01,"Developed, open space",21,2019
+PWRC,Sampled to study end,33.25643,-111.75764,2021-01-01,2025-04-30,"Developed, open space",21,2021
+Q-15,Sampled to study end,33.5063944266923,-112.256579389108,2016-12-21,2019-01-01,"Developed, low intensity",22,2016
+Q-15,Sampled to study end,33.5063944266923,-112.256579389108,2019-01-01,2021-01-01,"Developed, low intensity",22,2019
+Q-15,Sampled to study end,33.5063944266923,-112.256579389108,2021-01-01,2025-04-03,"Developed, low intensity",22,2021
+Q-15B,Sampled to study end,33.50165,-112.266,2016-12-21,2019-01-01,"Developed, low intensity",22,2016
+Q-15B,Sampled to study end,33.50165,-112.266,2019-01-01,2021-01-01,"Developed, low intensity",22,2019
+Q-15B,Sampled to study end,33.50165,-112.266,2021-01-01,2025-04-03,"Developed, low intensity",22,2021
+Q-15C,Sampled to study end,33.49738,-112.25745,2016-12-21,2019-01-01,"Developed, medium intensity",23,2016
+Q-15C,Sampled to study end,33.49738,-112.25745,2019-01-01,2021-01-01,"Developed, medium intensity",23,2019
+Q-15C,Sampled to study end,33.49738,-112.25745,2021-01-01,2025-04-03,"Developed, medium intensity",23,2021
+R-18,Sampled to study end,33.418739777382,-112.198706101637,2016-12-23,2019-01-01,"Developed, low intensity",22,2016
+R-18,Sampled to study end,33.418739777382,-112.198706101637,2019-01-01,2021-01-01,"Developed, low intensity",22,2019
+R-18,Sampled to study end,33.418739777382,-112.198706101637,2021-01-01,2025-04-12,"Developed, low intensity",22,2021
+R-18B,Sampled to study end,33.41015,-112.21421,2016-12-23,2019-01-01,"Developed, low intensity",22,2016
+R-18B,Sampled to study end,33.41015,-112.21421,2019-01-01,2021-01-01,"Developed, low intensity",22,2019
+R-18B,Sampled to study end,33.41015,-112.21421,2021-01-01,2025-04-12,"Developed, low intensity",22,2021
+R-18C,Sampled to study end,33.39753,-112.17001,2016-12-23,2019-01-01,"Developed, low intensity",22,2016
+R-18C,Sampled to study end,33.39753,-112.17001,2019-01-01,2021-01-01,"Developed, low intensity",22,2019
+R-18C,Sampled to study end,33.39753,-112.17001,2021-01-01,2025-04-12,"Developed, low intensity",22,2021
+TRSA,Sampled to study end,33.43389,-112.24509,2016-12-21,2019-01-01,"Developed, medium intensity",23,2016
+TRSA,Sampled to study end,33.43389,-112.24509,2019-01-01,2021-01-01,"Developed, medium intensity",23,2019
+TRSA,Sampled to study end,33.43389,-112.24509,2021-01-01,2025-04-07,"Developed, medium intensity",23,2021
+TRSB,Sampled to study end,33.42514,-112.28805,2016-12-21,2019-01-01,"Developed, low intensity",22,2016
+TRSB,Sampled to study end,33.42514,-112.28805,2019-01-01,2021-01-01,"Developed, low intensity",22,2019
+TRSB,Sampled to study end,33.42514,-112.28805,2021-01-01,2025-04-07,"Developed, low intensity",22,2021
+TRSC,Sampled to study end,33.40209,-112.27385,2016-12-21,2019-01-01,"Developed, medium intensity",23,2016
+TRSC,Sampled to study end,33.40209,-112.27385,2019-01-01,2021-01-01,"Developed, medium intensity",23,2019
+TRSC,Sampled to study end,33.40209,-112.27385,2021-01-01,2025-04-07,"Developed, medium intensity",23,2021
+U-18,Sampled to study end,33.4012860120768,-112.09064820221,2017-01-04,2019-01-01,"Developed, low intensity",22,2016
+U-18,Sampled to study end,33.4012860120768,-112.09064820221,2019-01-01,2021-01-01,"Developed, low intensity",22,2019
+U-18,Sampled to study end,33.4012860120768,-112.09064820221,2021-01-01,2025-04-15,"Developed, low intensity",22,2021
+U-18B,Sampled to study end,33.40558,-112.09829,2017-01-04,2019-01-01,"Developed, low intensity",22,2016
+U-18B,Sampled to study end,33.40558,-112.09829,2019-01-01,2021-01-01,"Developed, low intensity",22,2019
+U-18B,Sampled to study end,33.40558,-112.09829,2021-01-01,2025-04-15,"Developed, low intensity",22,2021
+U-18C,Sampled to study end,33.40068,-112.09386,2017-01-04,2019-01-01,"Developed, low intensity",22,2016
+U-18C,Sampled to study end,33.40068,-112.09386,2019-01-01,2021-01-01,"Developed, low intensity",22,2019
+U-18C,Sampled to study end,33.40068,-112.09386,2021-01-01,2025-04-15,"Developed, low intensity",22,2021
+U-21,Sampled to study end,33.31905,-112.0597,2017-01-19,2019-01-01,"Developed, medium intensity",23,2016
+U-21,Sampled to study end,33.31905,-112.0597,2019-01-01,2021-01-01,"Developed, medium intensity",23,2019
+U-21,Sampled to study end,33.31905,-112.0597,2021-01-01,2025-04-29,"Developed, medium intensity",23,2021
+U-21B,Sampled to study end,33.3071,-112.08096,2017-01-19,2019-01-01,"Developed, medium intensity",23,2016
+U-21B,Sampled to study end,33.3071,-112.08096,2019-01-01,2021-01-01,"Developed, medium intensity",23,2019
+U-21B,Sampled to study end,33.3071,-112.08096,2021-01-01,2025-04-29,"Developed, medium intensity",23,2021
+U-21C,Sampled to study end,33.30652,-112.04609,2017-01-26,2019-01-01,"Developed, low intensity",22,2016
+U-21C,Sampled to study end,33.30652,-112.04609,2019-01-01,2021-01-01,"Developed, low intensity",22,2019
+U-21C,Sampled to study end,33.30652,-112.04609,2021-01-01,2025-04-29,"Developed, low intensity",22,2021
+V-14B,Sampled to study end,33.54785,-112.05521,2016-12-30,2019-01-01,"Developed, medium intensity",23,2016
+V-14B,Sampled to study end,33.54785,-112.05521,2019-01-01,2021-01-01,"Developed, medium intensity",23,2019
+V-14B,Sampled to study end,33.54785,-112.05521,2021-01-01,2025-04-04,"Developed, medium intensity",23,2021
+V-14C,Sampled to study end,33.54601,-112.05283,2016-12-30,2019-01-01,"Developed, high intensity",24,2016
+V-14C,Sampled to study end,33.54601,-112.05283,2019-01-01,2021-01-01,"Developed, high intensity",24,2019
+V-14C,Sampled to study end,33.54601,-112.05283,2021-01-01,2025-04-04,"Developed, high intensity",24,2021
+W-15B,Sampled to study end,33.51892,-111.99351,2016-12-21,2019-01-01,"Developed, low intensity",22,2016
+W-15B,Sampled to study end,33.51892,-111.99351,2019-01-01,2021-01-01,"Developed, low intensity",22,2019
+W-15B,Sampled to study end,33.51892,-111.99351,2021-01-01,2025-04-24,"Developed, low intensity",22,2021
+W-15C,Sampled to study end,33.52015,-111.97997,2016-12-21,2019-01-01,"Developed, open space",21,2016
+W-15C,Sampled to study end,33.52015,-111.97997,2019-01-01,2021-01-01,"Developed, open space",21,2019
+W-15C,Sampled to study end,33.52015,-111.97997,2021-01-01,2025-04-24,"Developed, open space",21,2021
+X-17,Sampled to study end,33.4255927446935,-111.959822,2016-12-28,2019-01-01,"Developed, medium intensity",23,2016
+X-17,Sampled to study end,33.4255927446935,-111.959822,2019-01-01,2021-01-01,"Developed, medium intensity",23,2019
+X-17,Sampled to study end,33.4255927446935,-111.959822,2021-01-01,2025-04-25,"Developed, medium intensity",23,2021
+X-17B,Sampled to study end,33.42544,-111.95321,2016-12-28,2019-01-01,"Developed, medium intensity",23,2016
+X-17B,Sampled to study end,33.42544,-111.95321,2019-01-01,2021-01-01,"Developed, medium intensity",23,2019
+X-17B,Sampled to study end,33.42544,-111.95321,2021-01-01,2025-04-25,"Developed, medium intensity",23,2021
+X-17C,Sampled to study end,33.42789,-111.9551,2016-12-28,2019-01-01,"Developed, medium intensity",23,2016
+X-17C,Sampled to study end,33.42789,-111.9551,2019-01-01,2021-01-01,"Developed, medium intensity",23,2019
+X-17C,Sampled to study end,33.42789,-111.9551,2021-01-01,2025-04-25,"Developed, medium intensity",23,2021
+Ave35_dwn_B1,Sampled to study end,33.4119545761495,-112.134755216538,2013-01-09,2016-01-01,Shrub/scrub,52,2011
+Ave35_dwn_B1,Sampled to study end,33.4119545761495,-112.134755216538,2016-01-01,2019-01-01,Shrub/scrub,52,2016
+Ave35_dwn_B1,Sampled to study end,33.4119545761495,-112.134755216538,2019-01-01,2021-01-01,Shrub/scrub,52,2019
+Ave35_dwn_B1,Sampled to study end,33.4119545761495,-112.134755216538,2021-01-01,2025-04-11,Shrub/scrub,52,2021
+Ave67_dwn_B1,Sampled to study end,33.39764256,-112.20402578,2016-04-05,2019-01-01,Shrub/scrub,52,2016
+Ave67_dwn_B1,Sampled to study end,33.39764256,-112.20402578,2019-01-01,2021-01-01,Shrub/scrub,52,2019
+Ave67_dwn_B1,Sampled to study end,33.39764256,-112.20402578,2021-01-01,2025-04-11,Shrub/scrub,52,2021
+Ave67_mid_B1,Retired early,33.39613692,-112.20127241,2013-04-11,2016-01-01,Shrub/scrub,52,2011
+Ave67_mid_B1,Retired early,33.39613692,-112.20127241,2016-01-01,2016-01-20,Shrub/scrub,52,2016
+BM_mid_B2,Sampled to study end,33.38249101,-112.30335401,2013-01-09,2016-01-01,Woody wetlands,90,2011
+BM_mid_B2,Sampled to study end,33.38249101,-112.30335401,2016-01-01,2019-01-01,Woody wetlands,90,2016
+BM_mid_B2,Sampled to study end,33.38249101,-112.30335401,2019-01-01,2021-01-01,Woody wetlands,90,2019
+BM_mid_B2,Sampled to study end,33.38249101,-112.30335401,2021-01-01,2025-04-11,Woody wetlands,90,2021
+Price_up_B1,Sampled to study end,33.43850191,-111.88609801,2013-01-10,2016-01-01,Cultivated crops,82,2011
+Price_up_B1,Sampled to study end,33.43850191,-111.88609801,2016-01-01,2019-01-01,Cultivated crops,82,2016
+Price_up_B1,Sampled to study end,33.43850191,-111.88609801,2019-01-01,2021-01-01,Cultivated crops,82,2019
+Price_up_B1,Sampled to study end,33.43850191,-111.88609801,2021-01-01,2025-04-24,Cultivated crops,82,2021
+Priest_dwn_B1,Sampled to study end,33.43576689,-111.96029671,2013-01-10,2016-01-01,Shrub/scrub,52,2011
+Priest_dwn_B1,Sampled to study end,33.43576689,-111.96029671,2016-01-01,2019-01-01,Shrub/scrub,52,2016
+Priest_dwn_B1,Sampled to study end,33.43576689,-111.96029671,2019-01-01,2021-01-01,Shrub/scrub,52,2019
+Priest_dwn_B1,Sampled to study end,33.43576689,-111.96029671,2021-01-01,2025-04-24,Shrub/scrub,52,2021
+Rio_mid_B2,Sampled to study end,33.42176526,-112.07501513,2013-01-10,2016-01-01,Shrub/scrub,52,2011
+Rio_mid_B2,Sampled to study end,33.42176526,-112.07501513,2016-01-01,2019-01-01,Shrub/scrub,52,2016
+Rio_mid_B2,Sampled to study end,33.42176526,-112.07501513,2019-01-01,2021-01-01,Shrub/scrub,52,2019
+Rio_mid_B2,Sampled to study end,33.42176526,-112.07501513,2021-01-01,2025-04-24,Shrub/scrub,52,2021
+Tonto_up_B1,Sampled to study end,33.5585114,-111.60882633,2013-01-21,2016-01-01,Woody wetlands,90,2011
+Tonto_up_B1,Sampled to study end,33.5585114,-111.60882633,2016-01-01,2019-01-01,Woody wetlands,90,2016
+Tonto_up_B1,Sampled to study end,33.5585114,-111.60882633,2019-01-01,2021-01-01,Woody wetlands,90,2019
+Tonto_up_B1,Sampled to study end,33.5585114,-111.60882633,2021-01-01,2025-04-22,Woody wetlands,90,2021
+DBG,Sampled to study end,33.45716,-111.94313,2016-12-21,2019-01-01,Shrub/scrub,52,2016
+DBG,Sampled to study end,33.45716,-111.94313,2019-01-01,2021-01-01,Shrub/scrub,52,2019
+DBG,Sampled to study end,33.45716,-111.94313,2021-01-01,2025-04-24,Shrub/scrub,52,2021
+EMP,Sampled to study end,33.36277,-112.37363,2018-01-06,2019-01-01,Shrub/scrub,52,2016
+EMP,Sampled to study end,33.36277,-112.37363,2019-01-01,2021-01-01,Shrub/scrub,52,2019
+EMP,Sampled to study end,33.36277,-112.37363,2021-01-01,2025-04-12,Shrub/scrub,52,2021
+PWP,Sampled to study end,33.56412,-112.01406,2016-12-30,2019-01-01,Shrub/scrub,52,2016
+PWP,Sampled to study end,33.56412,-112.01406,2019-01-01,2021-01-01,Shrub/scrub,52,2019
+PWP,Sampled to study end,33.56412,-112.01406,2021-01-01,2025-04-04,Shrub/scrub,52,2021
+SMW,Sampled to study end,33.34228,-112.07801,2017-01-04,2019-01-01,Shrub/scrub,52,2016
+SMW,Sampled to study end,33.34228,-112.07801,2019-01-01,2021-01-01,Shrub/scrub,52,2019
+SMW,Sampled to study end,33.34228,-112.07801,2021-01-01,2025-04-15,Shrub/scrub,52,2021
+SRR,Sampled to study end,33.54671,-111.57948,2017-01-18,2019-01-01,Shrub/scrub,52,2016
+SRR,Sampled to study end,33.54671,-111.57948,2019-01-01,2021-01-01,Shrub/scrub,52,2019
+SRR,Sampled to study end,33.54671,-111.57948,2021-01-01,2025-04-22,Shrub/scrub,52,2021
+UMP,Sampled to study end,33.46646,-111.61554,2017-01-18,2019-01-01,Shrub/scrub,52,2016
+UMP,Sampled to study end,33.46646,-111.61554,2019-01-01,2021-01-01,Shrub/scrub,52,2019
+UMP,Sampled to study end,33.46646,-111.61554,2021-01-01,2025-04-22,Shrub/scrub,52,2021
+WTM,Sampled to study end,33.60488,-112.49995,2016-12-21,2019-01-01,Shrub/scrub,52,2016
+WTM,Sampled to study end,33.60488,-112.49995,2019-01-01,2021-01-01,Shrub/scrub,52,2019
+WTM,Sampled to study end,33.60488,-112.49995,2021-01-01,2025-04-03,Shrub/scrub,52,2021
+EE-15A,Retired early,33.3844927,-111.94664729,2000-11-14,2001-01-01,Shrub/scrub,52,2001
+EE-15A,Retired early,33.3844927,-111.94664729,2001-01-01,2006-01-01,Shrub/scrub,52,2001
+EE-15A,Retired early,33.3844927,-111.94664729,2006-01-01,2011-01-01,Shrub/scrub,52,2006
+EE-15A,Retired early,33.3844927,-111.94664729,2011-01-01,2016-01-01,Shrub/scrub,52,2011
+EE-15A,Retired early,33.3844927,-111.94664729,2016-01-01,2016-05-09,Shrub/scrub,52,2016
+EE-6A,Retired early,33.61083702,-112.25106619,2000-10-18,2001-01-01,Cultivated crops,82,2001
+EE-6A,Retired early,33.61083702,-112.25106619,2001-01-01,2006-01-01,Cultivated crops,82,2001
+EE-6A,Retired early,33.61083702,-112.25106619,2006-01-01,2011-01-01,Cultivated crops,82,2006
+EE-6A,Retired early,33.61083702,-112.25106619,2011-01-01,2016-01-01,Cultivated crops,82,2011
+EE-6A,Retired early,33.61083702,-112.25106619,2016-01-01,2016-04-21,Cultivated crops,82,2016
+EE-7C,Retired early,33.60987126,-112.10832196,2000-10-07,2001-01-01,"Developed, low intensity",22,2001
+EE-7C,Retired early,33.60987126,-112.10832196,2001-01-01,2006-01-01,"Developed, low intensity",22,2001
+EE-7C,Retired early,33.60987126,-112.10832196,2006-01-01,2011-01-01,"Developed, low intensity",22,2006
+EE-7C,Retired early,33.60987126,-112.10832196,2011-01-01,2016-01-01,"Developed, low intensity",22,2011
+EE-7C,Retired early,33.60987126,-112.10832196,2016-01-01,2016-05-02,"Developed, low intensity",22,2016
+EN-4B,Retired early,33.73959387,-112.68089849,2000-11-16,2001-01-01,Shrub/scrub,52,2001
+EN-4B,Retired early,33.73959387,-112.68089849,2001-01-01,2006-01-01,Shrub/scrub,52,2001
+EN-4B,Retired early,33.73959387,-112.68089849,2006-01-01,2011-01-01,Shrub/scrub,52,2006
+EN-4B,Retired early,33.73959387,-112.68089849,2011-01-01,2016-01-01,Shrub/scrub,52,2011
+EN-4B,Retired early,33.73959387,-112.68089849,2016-01-01,2016-04-04,Shrub/scrub,52,2016
+EN-7B,Retired early,33.81620287,-111.97260135,2000-11-10,2001-01-01,Shrub/scrub,52,2001
+EN-7B,Retired early,33.81620287,-111.97260135,2001-01-01,2006-01-01,Shrub/scrub,52,2001
+EN-7B,Retired early,33.81620287,-111.97260135,2006-01-01,2011-01-01,Shrub/scrub,52,2006
+EN-7B,Retired early,33.81620287,-111.97260135,2011-01-01,2016-01-01,Shrub/scrub,52,2011
+EN-7B,Retired early,33.81620287,-111.97260135,2016-01-01,2016-05-04,Shrub/scrub,52,2016
+PE-10B,Retired early,33.38940105,-112.25664033,2000-10-30,2001-01-01,Woody wetlands,90,2001
+PE-10B,Retired early,33.38940105,-112.25664033,2001-01-01,2006-01-01,Woody wetlands,90,2001
+PE-10B,Retired early,33.38940105,-112.25664033,2006-01-01,2011-01-01,Woody wetlands,90,2006
+PE-10B,Retired early,33.38940105,-112.25664033,2011-01-01,2016-01-01,Woody wetlands,90,2011
+PE-10B,Retired early,33.38940105,-112.25664033,2016-01-01,2016-05-05,Woody wetlands,90,2016
+PE-11A,Retired early,33.362931,-111.7351686,2000-11-02,2001-01-01,"Developed, low intensity",22,2001
+PE-11A,Retired early,33.362931,-111.7351686,2001-01-01,2006-01-01,"Developed, low intensity",22,2001
+PE-11A,Retired early,33.362931,-111.7351686,2006-01-01,2011-01-01,"Developed, low intensity",22,2006
+PE-11A,Retired early,33.362931,-111.7351686,2011-01-01,2016-01-01,"Developed, low intensity",22,2011
+PE-11A,Retired early,33.362931,-111.7351686,2016-01-01,2016-05-12,"Developed, low intensity",22,2016
+PE-13A,Retired early,33.59830306,-112.06876055,2000-10-07,2001-01-01,Shrub/scrub,52,2001
+PE-13A,Retired early,33.59830306,-112.06876055,2001-01-01,2006-01-01,Shrub/scrub,52,2001
+PE-13A,Retired early,33.59830306,-112.06876055,2006-01-01,2011-01-01,Shrub/scrub,52,2006
+PE-13A,Retired early,33.59830306,-112.06876055,2011-01-01,2016-01-01,Shrub/scrub,52,2011
+PE-13A,Retired early,33.59830306,-112.06876055,2016-01-01,2016-04-20,Shrub/scrub,52,2016
+PE-1D,Retired early,33.43499182,-111.90406077,2000-11-01,2001-01-01,Open water,11,2001
+PE-1D,Retired early,33.43499182,-111.90406077,2001-01-01,2006-01-01,Open water,11,2001
+PE-1D,Retired early,33.43499182,-111.90406077,2006-01-01,2011-01-01,Open water,11,2006
+PE-1D,Retired early,33.43499182,-111.90406077,2011-01-01,2016-01-01,Open water,11,2011
+PE-1D,Retired early,33.43499182,-111.90406077,2016-01-01,2016-05-02,Open water,11,2016
+PN-1B,Retired early,33.54746413,-111.65684525,2000-11-02,2001-01-01,Open water,11,2001
+PN-1B,Retired early,33.54746413,-111.65684525,2001-01-01,2006-01-01,Open water,11,2001
+PN-1B,Retired early,33.54746413,-111.65684525,2006-01-01,2011-01-01,Open water,11,2006
+PN-1B,Retired early,33.54746413,-111.65684525,2011-01-01,2016-01-01,Open water,11,2011
+PN-1B,Retired early,33.54746413,-111.65684525,2016-01-01,2016-05-03,Open water,11,2016
+PN-2A,Retired early,33.63757429,-111.66807055,2001-05-05,2006-01-01,Woody wetlands,90,2001
+PN-2A,Retired early,33.63757429,-111.66807055,2006-01-01,2011-01-01,Woody wetlands,90,2006
+PN-2A,Retired early,33.63757429,-111.66807055,2011-01-01,2016-01-01,Woody wetlands,90,2011
+PN-2A,Retired early,33.63757429,-111.66807055,2016-01-01,2016-04-21,Woody wetlands,90,2016
+PN-7A,Retired early,33.88142221,-111.95861145,2000-11-10,2001-01-01,Shrub/scrub,52,2001
+PN-7A,Retired early,33.88142221,-111.95861145,2001-01-01,2006-01-01,Shrub/scrub,52,2001
+PN-7A,Retired early,33.88142221,-111.95861145,2006-01-01,2011-01-01,Shrub/scrub,52,2006
+PN-7A,Retired early,33.88142221,-111.95861145,2011-01-01,2016-01-01,Shrub/scrub,52,2011
+PN-7A,Retired early,33.88142221,-111.95861145,2016-01-01,2016-05-04,Shrub/scrub,52,2016
