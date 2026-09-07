@@ -861,7 +861,11 @@ def build_segmented_timeline_html(
         ),
         annotations=nlcd_annotations + [
             dict(
-                text="Segmented by NLCD snapshot years (2001, 2006, 2011, 2016, 2019). Dotted lines mark snapshot boundaries. Ended sites stop at their end date.",
+                text=(
+                    "Segmented by NLCD snapshot years ("
+                    + ", ".join(str(y) for y in NLCD_YEARS)
+                    + "). Dotted lines mark snapshot boundaries. Sites stop at their last sampling date."
+                ),
                 xref="paper",
                 yref="paper",
                 x=0.5,
